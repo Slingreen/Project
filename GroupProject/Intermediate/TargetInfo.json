@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "GroupProject",
+			"Path": "C:\\Users\\benja\\Documents\\GitHub\\Project\\GroupProject\\Source\\GroupProject.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "GroupProjectEditor",
+			"Path": "C:\\Users\\benja\\Documents\\GitHub\\Project\\GroupProject\\Source\\GroupProjectEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}
