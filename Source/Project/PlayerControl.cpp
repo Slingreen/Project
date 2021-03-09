@@ -33,9 +33,6 @@ void APlayerControl::Tick(float DeltaTime)
 	//If CurrentVelocity == 0 no movement will happen
 	FVector NewLocation = GetActorLocation() + (CurrentVelocity * DeltaTime);
 
-	//	Input setup
-	PlayerInputComponent->BindAxis("Right", this, &ACannon::MoveRight);
-	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &ACannon::Shoot);
 }
 
 // Called to bind functionality to input
@@ -43,9 +40,11 @@ void APlayerControl::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	//	Input setup
+	PlayerInputComponent->BindAxis("Right", this, &APlayerControl::MoveRight);
 }
 
-void ACannon::MoveRight(float Value)
+void APlayerControl::MoveRight(float Value)
 {
 	CurrentVelocity.Y = FMath::Clamp(Value, -1.f, 1.f) * MoveSpeed;
 }
