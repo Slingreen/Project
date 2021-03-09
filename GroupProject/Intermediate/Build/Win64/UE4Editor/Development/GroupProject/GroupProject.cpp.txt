@@ -1,2 +1,0 @@
-C:\Users\benja\Documents\GitHub\Project\GroupProject\Intermediate\Build\Win64\UE4Editor\Development\GroupProject\Definitions.GroupProject.h
-C:\Users\benja\Documents\GitHub\Project\GroupProject\Source\GroupProject\GroupProject.h
