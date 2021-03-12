@@ -17,6 +17,10 @@ ASentry::ASentry()
 	//these are temporary values, change in gametesting
 	Sensing->SensingInterval = .25f;
 	Sensing->SetPeripheralVisionAngle(10.f);
+	Sensing->SightRadius = 1000.f;
+	Sensing->HearingThreshold = 500.f;
+	Sensing->LOSHearingThreshold = 1500.f;
+
 
 
 }
@@ -36,6 +40,9 @@ void ASentry::OnSeePlayer(ACharacter* player)
 void ASentry::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	FRotator CurrentRotation = GetActorRotation();
+	CurrentRotation.Yaw += RotationSpeed * DeltaTime;
+	SetActorRotation(CurrentRotation);
 
 }
 

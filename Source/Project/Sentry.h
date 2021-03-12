@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Perception/PawnSensingComponent.h"
+//#include "Math/Rotator.h"
 #include "Sentry.generated.h"
 
 UCLASS()
@@ -20,11 +21,15 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-		UPROPERTY(VisibleAnywhere, Category = "AI");
-		class UPawnSensingComponent* Sensing;
+		UPROPERTY(EditAnywhere, Category = "AI")
+			class UPawnSensingComponent* Sensing;
 
 		UFUNCTION()
 			void OnSeePlayer(ACharacter* player);
+
+		UPROPERTY(EditAnywhere, Category = "AI")
+			float RotationSpeed{ 10.f };
+
 
 public:	
 	// Called every frame
