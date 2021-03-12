@@ -38,4 +38,5 @@ private:
 	//Functions for movement
 	void MoveForward(float Value);
 	void MoveRight(float Value);
+	//UCharacterMovementComponent* CM;
 };
