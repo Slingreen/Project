@@ -1,8 +1,7 @@
-# Project
-Hi I am Benjamin
-Hi Benjamin :)
-Lets have fun
-Just a quick test
-| Header One     | Header Two     |
+# Group 12
+Participants
+| Programmers    | Artists        |
 | :------------- | :------------- |
-| Item One       | Item Two       |
+| Benjamin A.E Darici | Alex Ferdinand Gran |
+| Erlend Engeland | Rosann Johnsen |
+| Lenita Bø Njærheim | Miranda Kent |
