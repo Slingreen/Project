@@ -9,6 +9,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+
+#include "SoundBall.h"
 //
 //#include "Camera/CameraComponent.h"
 //#include "Camera/CameraActor.h"
@@ -45,12 +47,17 @@ APlayerWilliam::APlayerWilliam()
 	// Create a follow camera - the actual camera the game is viewed through
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);	//put it at the end of the boom
+
+	SoundSource = CreateDefaultSubobject<USceneComponent>(TEXT("SoundSource"));
+	SoundSource->SetupAttachment(RootComponent);
+	SoundSource->SetRelativeLocation(FVector(30.f, 0.f, -90.f));
 }
 
 // Called when the game starts or when spawned
 void APlayerWilliam::BeginPlay()
 {
 	Super::BeginPlay();
+	TimeGone = 1.f;
 }
 
 // Called every frame
@@ -58,6 +65,7 @@ void APlayerWilliam::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime); 
 	//AddControllerYawInput(1.0f);
+	TimeGone += DeltaTime;
 }
 
 // Called to bind functionality to input
@@ -83,6 +91,7 @@ void APlayerWilliam::MoveForward(float Value)
 
 		// get forward vector
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		Sound();
 		AddMovementInput(Direction, Value);
 	}
 }
@@ -101,7 +110,24 @@ void APlayerWilliam::MoveRight(float Value)
 		// get right vector 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		// add movement in that direction
+		Sound();
 		AddMovementInput(Direction, Value);
 	}
 }
 
+void APlayerWilliam::Sound()
+{
+	UWorld* World = GetWorld();
+
+	if (World)	//	check if World is valid
+	{
+		
+		//	If it is time to spawn more enemies and the game has not spawned all enemies yet
+		if (TimeGone > TimeBetweenSpawns)
+		{
+			TimeGone = 0.f;
+			//	Spawns bullet at SpawnPoint 
+			World->SpawnActor<ASoundBall>(SoundBlueprint, SoundSource->GetComponentLocation(), GetActorRotation());
+		}
+	}
+}

@@ -30,13 +30,29 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 		class UCameraComponent* FollowCamera;
 
+	// Camera
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Setup")
+		class USceneComponent* SoundSource{ nullptr };
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	//	The bullets
+	UPROPERTY(EditAnywhere, Category = "Setup");
+	TSubclassOf<class ASoundBall> SoundBlueprint;
+
+	//	Spawn Position
+	UPROPERTY(EditAnywhere, Category = "Setup");
+	FVector SpawnPoint{ 0.f, 0.f, -50.f };
+
+	float TimeBetweenSpawns{ 0.25f };
+	float TimeGone{ 0.f };
 
 private:
 	//Functions for movement
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 	//UCharacterMovementComponent* CM;
+	void Sound();
 };
