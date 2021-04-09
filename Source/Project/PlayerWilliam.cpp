@@ -51,11 +51,22 @@ APlayerWilliam::APlayerWilliam()
 	SoundSource = CreateDefaultSubobject<USceneComponent>(TEXT("SoundSource"));
 	SoundSource->SetupAttachment(RootComponent);
 	SoundSource->SetRelativeLocation(FVector(30.f, 0.f, -90.f));
+
+	//Using this for run speed. Have to set it to other than default 600 = walkspeed
+	GetCharacterMovement()->MaxCustomMovementSpeed = 300.f;
 }
 
 // Called when the game starts or when spawned
 void APlayerWilliam::BeginPlay()
 {
+// Setting up movement speeds:
+	//	600
+	MaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	//	300
+	MaxSneakSpeed = GetCharacterMovement()->MaxCustomMovementSpeed;
+
+	GetCharacterMovement()->MaxWalkSpeed = MaxSneakSpeed;
+
 	Super::BeginPlay();
 	TimeGone = 1.f;
 }
@@ -75,6 +86,8 @@ void APlayerWilliam::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	PlayerInputComponent->BindAxis("Forward", this, &APlayerWilliam::MoveForward);
 	PlayerInputComponent->BindAxis("Right", this, &APlayerWilliam::MoveRight);
+	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &APlayerWilliam::StartFast);
+	PlayerInputComponent->BindAction("Run", IE_Released, this, &APlayerWilliam::StopFast);
 }
 
 void APlayerWilliam::MoveForward(float Value)
@@ -113,6 +126,16 @@ void APlayerWilliam::MoveRight(float Value)
 		Sound();
 		AddMovementInput(Direction, Value);
 	}
+}
+
+void APlayerWilliam::StartFast()
+{
+	GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
+}
+
+void APlayerWilliam::StopFast()
+{
+	GetCharacterMovement()->MaxWalkSpeed = MaxSneakSpeed;
 }
 
 void APlayerWilliam::Sound()
