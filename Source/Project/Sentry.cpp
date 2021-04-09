@@ -2,7 +2,11 @@
 
 
 #include "Sentry.h"
+#include "AISentryController.h"
 #include "Perception/PawnSensingComponent.h"
+#include "BehaviorTree/BehaviorTree.h"
+
+//#include "Perception/PawnSensingComponent.h"
 
 // Sets default values
 ASentry::ASentry()
@@ -10,18 +14,20 @@ ASentry::ASentry()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	//Used this page to figure out how UPawnSensingComponent works: https://forums.unrealengine.com/development-discussion/c-gameplay-programming/19571-mini-tutorial-using-upawnsensingcomponent-in-c
-	Sensing = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("Sensing"));
-	Sensing->bEnableSensingUpdates=true;
-	Sensing->bOnlySensePlayers = true;
-	//these are temporary values, change in gametesting
-	Sensing->SensingInterval = .25f;
-	Sensing->SetPeripheralVisionAngle(10.f);
-	Sensing->SightRadius = 1000.f;
-	Sensing->HearingThreshold = 500.f;
-	Sensing->LOSHearingThreshold = 1500.f;
 
+	PawnSensing = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensing"));
 
+	PawnSensing->SetPeripheralVisionAngle(20.f);
+}
+
+bool ASentry::RotateSentry()
+{
+
+	//Sentry->SetActorRotation(0.f, SentryYaw + SentryIdleSpeed, 0.f);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("I'm Rotating :)"));
+	NewRotation.Yaw += SentryIdleSpeed;
+	SetActorRotation(NewRotation);
+	return true;
 
 }
 
@@ -29,22 +35,47 @@ ASentry::ASentry()
 void ASentry::BeginPlay()
 {
 	Super::BeginPlay();
-	
-}
 
-void ASentry::OnSeePlayer(ACharacter* player)
-{
+	if (PawnSensing)
+	{
+		PawnSensing->OnSeePawn.AddDynamic(this, &ASentry::OnPlayerCaught);
+	}
+
+	
 }
 
 // Called every frame
 void ASentry::Tick(float DeltaTime)
 {
+	AAISentryController* AIController = Cast<AAISentryController>(GetController());
 	Super::Tick(DeltaTime);
-	FRotator CurrentRotation = GetActorRotation();
-	CurrentRotation.Yaw += RotationSpeed * DeltaTime;
-	SetActorRotation(CurrentRotation);
+
+	if (PlayerVisible)
+	{
+
+		if (CurrentTimer >= VisibleTimer)
+		{
+
+			PlayerVisible = false;
+			
+			AIController->PlayerVisible = false;
+			AIController->SetPlayerCaught(nullptr); 
+			CurrentTimer = 0.f;
+
+		}
+		CurrentTimer += DeltaTime;
+
+	}
+
+	//RotateSentry();
+
+
+
 
 }
+
+
+
 
 // Called to bind functionality to input
 void ASentry::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -52,4 +83,23 @@ void ASentry::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
+
+void ASentry::OnPlayerCaught(APawn* APawn)
+{
+
+
+	AAISentryController* AIController = Cast<AAISentryController>(GetController());
+	if (AIController)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("I See You!"));
+		AIController->SetPlayerCaught(APawn);
+		AIController->PlayerVisible = true;
+		CurrentTimer = 0.f;
+		PlayerVisible = true;
+	}
+
+}
+
+
+
 

@@ -4,21 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Sentry.generated.h"
+#include "Crabmonster.generated.h"
 
 UCLASS()
-class PROJECT_API ASentry : public ACharacter
+class PROJECT_API ACrabmonster : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	ASentry();
+	ACrabmonster();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
 
 public:	
 	// Called every frame
@@ -28,42 +27,35 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
-
-
-
-	//Used https://www.youtube.com/watch?v=3Z1A825gTA8 as a guide/base for the sentry AI
-
 	UPROPERTY(EditAnywhere, Category = "AI")
 		class UBehaviorTree* BehaviorTree;
 
 
 	UPROPERTY(VisibleAnywhere, Category = "AI")
-		class UPawnSensingComponent* PawnSensing;
+		class UPawnSensingComponent* Sensing;
 
-	FRotator NewRotation = FRotator(0.f, 0.f, 0.f);
+	UPROPERTY(EditAnywhere, Category = "Setup")
+		class UBoxComponent* Collider{ nullptr };
 
-	UPROPERTY(EditAnywhere, Category = "AI")
-		float SentryIdleSpeed = 0.5f;
+	//UPROPERTY(EditAnywhere, Category = "Setup")
+		//class UBoxComponent* Root{ nullptr };
+	UFUNCTION()
+		void MeleeAttack();
 
-	bool RotateSentry();
 
-	float CurrentTimer = 0.f;
+
 private:
 
 	UFUNCTION()
 		void OnPlayerCaught(APawn* APawn);
 
-	UPROPERTY(EditAnywhere, Category = "AI")
-		float VisibleTimer = 5.f;
 
 
+	UFUNCTION()
+		void Overlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweeb,
+			const FHitResult& SweepResult);
 
-
-
-	bool PlayerVisible = false;	
-
-
-
-
+	
 
 };
