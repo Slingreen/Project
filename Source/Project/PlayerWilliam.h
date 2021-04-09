@@ -61,5 +61,6 @@ private:
 	void StopFast();
 
 
+
 	void Sound();
 };
