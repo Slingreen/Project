@@ -25,4 +25,7 @@ class PROJECT_API UPlayerAnimInstance : public UAnimInstance
 
 			UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
 				float MovementSpeed{ 0.f };
+
+			UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
+				bool bDeath{ false };
 };

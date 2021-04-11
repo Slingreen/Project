@@ -2,6 +2,8 @@
 
 
 #include "PlayerAnimInstance.h"
+
+#include "PlayerWilliam.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 void UPlayerAnimInstance::NativeInitializeAnimation()
@@ -24,5 +26,7 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 		FVector TempSpeed = MyPawn->GetVelocity();
 		FVector LateralSpeed = FVector(TempSpeed.X, TempSpeed.Y, 0.f);
 		MovementSpeed = LateralSpeed.Size();
+
+		bDeath = Cast<APlayerWilliam>(MyPawn)->AmIDead;
 	}
 }

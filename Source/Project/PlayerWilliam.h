@@ -34,13 +34,16 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Setup")
 		class USceneComponent* SoundSource{ nullptr };
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Setup")
+	bool AmIDead{ false };
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	//	The bullets
-	UPROPERTY(EditAnywhere, Category = "Setup");
-	TSubclassOf<class ASoundBall> SoundBlueprint;
+	/*UPROPERTY(EditAnywhere, Category = "Setup");
+	TSubclassOf<class ASoundBall> SoundBlueprint;*/
 
 	//	Spawn Position
 	UPROPERTY(EditAnywhere, Category = "Setup");
@@ -51,8 +54,10 @@ protected:
 
 	float MaxSneakSpeed{ 300.f };
 	float MaxWalkSpeed{ 600.f };
+	
 
 private:
+	
 	//Functions for movement
 	void MoveForward(float Value);
 	void MoveRight(float Value);
@@ -62,5 +67,7 @@ private:
 
 
 
-	void Sound();
+	//void Sound();
+public: 
+	void death();
 };

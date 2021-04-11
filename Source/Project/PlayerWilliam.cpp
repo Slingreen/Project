@@ -88,6 +88,7 @@ void APlayerWilliam::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAxis("Right", this, &APlayerWilliam::MoveRight);
 	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &APlayerWilliam::StartFast);
 	PlayerInputComponent->BindAction("Run", IE_Released, this, &APlayerWilliam::StopFast);
+	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerWilliam::death);
 }
 
 void APlayerWilliam::MoveForward(float Value)
@@ -96,7 +97,7 @@ void APlayerWilliam::MoveForward(float Value)
 	Direction = GetActorForwardVector();
 	AddMovementInput(Direction, Value);	*/
 
-	if ((Controller != nullptr) && (Value != 0.0f))
+	if ((Controller != nullptr) && (Value != 0.0f) && !AmIDead)
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -104,7 +105,7 @@ void APlayerWilliam::MoveForward(float Value)
 
 		// get forward vector
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		Sound();
+		//Sound();
 		AddMovementInput(Direction, Value);
 	}
 }
@@ -114,7 +115,7 @@ void APlayerWilliam::MoveRight(float Value)
 	/*FVector Direction;
 	Direction = GetActorRightVector();
 	AddMovementInput(Direction, Value);*/
-	if ((Controller != nullptr) && (Value != 0.0f))
+	if ((Controller != nullptr) && (Value != 0.0f) && !AmIDead)
 	{
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -123,7 +124,7 @@ void APlayerWilliam::MoveRight(float Value)
 		// get right vector 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		// add movement in that direction
-		Sound();
+		//Sound();
 		AddMovementInput(Direction, Value);
 	}
 }
@@ -138,7 +139,7 @@ void APlayerWilliam::StopFast()
 	GetCharacterMovement()->MaxWalkSpeed = MaxSneakSpeed;
 }
 
-void APlayerWilliam::Sound()
+/*void APlayerWilliam::Sound()
 {
 	UWorld* World = GetWorld();
 
@@ -153,4 +154,9 @@ void APlayerWilliam::Sound()
 			World->SpawnActor<ASoundBall>(SoundBlueprint, SoundSource->GetComponentLocation(), GetActorRotation());
 		}
 	}
+}*/
+
+void APlayerWilliam::death()
+{
+	AmIDead = true;
 }
