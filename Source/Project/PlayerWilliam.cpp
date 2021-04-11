@@ -88,7 +88,7 @@ void APlayerWilliam::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAxis("Right", this, &APlayerWilliam::MoveRight);
 	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &APlayerWilliam::StartFast);
 	PlayerInputComponent->BindAction("Run", IE_Released, this, &APlayerWilliam::StopFast);
-	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerWilliam::death);
+	PlayerInputComponent->BindAction("Die", IE_Pressed, this, &APlayerWilliam::death);
 }
 
 void APlayerWilliam::MoveForward(float Value)
@@ -159,4 +159,9 @@ void APlayerWilliam::StopFast()
 void APlayerWilliam::death()
 {
 	AmIDead = true;
+}
+
+void APlayerWilliam::Win()
+{
+	bWin = true;
 }

@@ -35,7 +35,10 @@ public:
 		class USceneComponent* SoundSource{ nullptr };
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Setup")
-	bool AmIDead{ false };
+		bool AmIDead{ false };
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Setup")
+		bool bWin{ false };
 
 protected:
 	// Called when the game starts or when spawned
@@ -70,4 +73,5 @@ private:
 	//void Sound();
 public: 
 	void death();
+	void Win();
 };
