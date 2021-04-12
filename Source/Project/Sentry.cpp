@@ -21,6 +21,7 @@ ASentry::ASentry()
 	PawnSensing = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensing"));
 
 	PawnSensing->SetPeripheralVisionAngle(60.f);
+	PawnSensing->SightRadius = 1000.f;
 
 	Capsule = CreateDefaultSubobject<USceneComponent>(TEXT("Capsule"));
 	Capsule->SetupAttachment(RootComponent);

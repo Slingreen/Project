@@ -57,7 +57,7 @@ public:
 	bool PlayerVisible = false;
 	UPROPERTY(EditAnywhere, Category = "Setup")
 		FVector Offset {
-		150.f, 0.f, 0.f
+		0.f, 0.f, 0.f
 	};
 
 	//class UCapsuleComponent* Capsule;
