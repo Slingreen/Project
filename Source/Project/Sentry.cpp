@@ -5,6 +5,9 @@
 #include "AISentryController.h"
 #include "Perception/PawnSensingComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "SentryProjectile.h"
+#include "Math/Rotator.h"
+#include "Components/SphereComponent.h"
 
 //#include "Perception/PawnSensingComponent.h"
 
@@ -17,17 +20,29 @@ ASentry::ASentry()
 
 	PawnSensing = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensing"));
 
-	PawnSensing->SetPeripheralVisionAngle(20.f);
+	PawnSensing->SetPeripheralVisionAngle(60.f);
+
+	Capsule = CreateDefaultSubobject<USceneComponent>(TEXT("Capsule"));
+	Capsule->SetupAttachment(RootComponent);
+	Capsule->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
+	
+	//Capsule = GetCapsuleComponent();
+	//RootComponent = Capsule;
+	//GetCapsuleComponent()->USceneComponent::AttachTo(RootComponent);
+	//Sphere->SetupAttachment(RootComponent);
+	//Capsule->SetupAttachment(RootComponent);
+	
+	
 }
 
-bool ASentry::RotateSentry()
+void ASentry::RotateSentry()
 {
 
 	//Sentry->SetActorRotation(0.f, SentryYaw + SentryIdleSpeed, 0.f);
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("I'm Rotating :)"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("I'm Rotating :)"));
 	NewRotation.Yaw += SentryIdleSpeed;
 	SetActorRotation(NewRotation);
-	return true;
+	//return true;
 
 }
 
@@ -61,11 +76,14 @@ void ASentry::Tick(float DeltaTime)
 			AIController->PlayerVisible = false;
 			AIController->SetPlayerCaught(nullptr); 
 			CurrentTimer = 0.f;
+			
 
 		}
 		CurrentTimer += DeltaTime;
+		ShootCooldownTimer += DeltaTime;
 
 	}
+	//Shoot();
 
 	//RotateSentry();
 
@@ -84,6 +102,27 @@ void ASentry::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
+void ASentry::Shoot()
+{
+	//UCapsuleComponent* Capsule = GetCapsuleComponent();
+	UWorld* World = GetWorld();
+	if (World)
+	{
+
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("BAM!"));
+		//FRotator Rotation = GetActorRotation();
+		//Location = GetActorLocation();
+		//Location.Z += 100;
+		
+		World->SpawnActor<ASentryProjectile>(ProjectileBlueprint, GetActorLocation() + Offset, GetActorRotation());
+		ShootCooldownTimer = 0.f;
+
+		
+																											  
+	}
+
+}
+
 void ASentry::OnPlayerCaught(APawn* APawn)
 {
 
@@ -91,11 +130,13 @@ void ASentry::OnPlayerCaught(APawn* APawn)
 	AAISentryController* AIController = Cast<AAISentryController>(GetController());
 	if (AIController)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("I See You!"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("I See You!"));
 		AIController->SetPlayerCaught(APawn);
 		AIController->PlayerVisible = true;
 		CurrentTimer = 0.f;
 		PlayerVisible = true;
+		//GetActorLocation(APawn);
+		
 	}
 
 }

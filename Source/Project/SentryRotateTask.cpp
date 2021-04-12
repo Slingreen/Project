@@ -12,18 +12,35 @@
 
 EBTNodeResult::Type USentryRotateTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	Result = Sentry->RotateSentry();
+	AAISentryController* AICon = Cast<AAISentryController>(OwnerComp.GetAIOwner());
+	ASentry* Sentry = Cast<ASentry>(AICon->GetPawn());
 
-	if (Result)
+	if (AICon)
 	{
-		Sentry->RotateSentry();
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("I'm Rotating :)"));
-		Result = false;
-		return EBTNodeResult::Succeeded;
+
+		if (Sentry->PlayerVisible)
+		{
+
+			if (Sentry->ShootCooldownTimer > Sentry->ShootCooldown)
+			{
+				Sentry->Shoot();
+			}
+			return EBTNodeResult::Succeeded;
+			//AICon->SetActorRotation();
+
+		}
+		else 
+		{
+			Sentry->RotateSentry();
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("I'm Rotating :)"));
+			return EBTNodeResult::Succeeded;
+		}
+		
 
 	}
-	else
-	{
-		return EBTNodeResult::Failed;
-	}
+	return EBTNodeResult::Succeeded;
+	
+
 }
+
+
