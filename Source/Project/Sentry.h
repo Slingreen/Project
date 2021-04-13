@@ -32,7 +32,7 @@ public:
 
 
 
-	//Used https://www.youtube.com/watch?v=3Z1A825gTA8 as a guide/base for the sentry AI
+	//Used https://www.youtube.com/watch?v=3Z1A825gTA8 as a guide/base to set up the blackboard and behavior tree
 
 	//class UCapsuleComponent* Capsule{ nullptr };
 	
@@ -42,6 +42,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = "AI")
 		class UPawnSensingComponent* PawnSensing;
+
+	UPROPERTY(EditAnywhere, Category = "Setup");
+	UStaticMeshComponent* EyeMesh{ nullptr };
 
 	FRotator NewRotation = FRotator(0.f, 0.f, 0.f);
 
@@ -75,7 +78,7 @@ private:
 		void OnPlayerCaught(APawn* APawn);
 
 	UPROPERTY(EditAnywhere, Category = "AI")
-		float VisibleTimer = 5.f;
+		float VisibleTimer = 1.f;
 
 	//UPROPERTY(EditAnywhere, Category = "Setup")
 		//FVector	Offset = FVector (0.f,0.f,0.f);

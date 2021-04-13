@@ -20,12 +20,15 @@ ASentry::ASentry()
 
 	PawnSensing = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensing"));
 
-	PawnSensing->SetPeripheralVisionAngle(60.f);
+	PawnSensing->SetPeripheralVisionAngle(80.f);
 	PawnSensing->SightRadius = 1000.f;
 
 	Capsule = CreateDefaultSubobject<USceneComponent>(TEXT("Capsule"));
 	Capsule->SetupAttachment(RootComponent);
 	Capsule->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
+	EyeMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("EyeMesh"));
+	
+	//EyeMesh->SetupAttachment(RootComponent);
 	
 	//Capsule = GetCapsuleComponent();
 	//RootComponent = Capsule;
