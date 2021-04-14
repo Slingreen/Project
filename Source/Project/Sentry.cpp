@@ -119,7 +119,7 @@ void ASentry::Shoot()
 		//Location.Z += 100;
 		
 		World->SpawnActor<ASentryProjectile>(ProjectileBlueprint, GetActorLocation() + Offset, GetActorRotation());
-		ShootCooldownTimer = 0.f;
+		ShootCooldownTimer = 0.1f;
 
 		
 																											  
