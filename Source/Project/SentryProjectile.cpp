@@ -4,6 +4,7 @@
 #include "SentryProjectile.h"
 #include "Components/SphereComponent.h"
 #include "PlayerWilliam.h"
+#include "Sentry.h"
 
 // Sets default values
 ASentryProjectile::ASentryProjectile()
@@ -39,11 +40,15 @@ void ASentryProjectile::Overlap(UPrimitiveComponent* OverlappedComponent, AActor
 
 		Cast<APlayerWilliam>(OtherActor)->death();
 
-	}
-	if (TimeLived > 1.f)
-	{
+	}else if (!(OtherActor->IsA(ASentry::StaticClass()))) {
+		//UE_LOG(LogTemp, Warning, TEXT("Not_Sentry"))
 		this->Destroy();
 	}
+	/*if (TimeLived > 1.f)
+	{
+		this->Destroy();
+	}*/
+
 }
 
 
