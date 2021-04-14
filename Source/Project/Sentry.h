@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Sentry.generated.h"
 
+
 UCLASS()
 class PROJECT_API ASentry : public ACharacter
 {
@@ -31,8 +32,10 @@ public:
 
 
 
-	//Used https://www.youtube.com/watch?v=3Z1A825gTA8 as a guide/base for the sentry AI
+	//Used https://www.youtube.com/watch?v=3Z1A825gTA8 as a guide/base to set up the blackboard and behavior tree
 
+	//class UCapsuleComponent* Capsule{ nullptr };
+	
 	UPROPERTY(EditAnywhere, Category = "AI")
 		class UBehaviorTree* BehaviorTree;
 
@@ -40,30 +43,47 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "AI")
 		class UPawnSensingComponent* PawnSensing;
 
+	UPROPERTY(EditAnywhere, Category = "Setup");
+	UStaticMeshComponent* EyeMesh{ nullptr };
+
 	FRotator NewRotation = FRotator(0.f, 0.f, 0.f);
 
 	UPROPERTY(EditAnywhere, Category = "AI")
 		float SentryIdleSpeed = 0.5f;
 
-	bool RotateSentry();
-
+	void RotateSentry();
+	UPROPERTY(VisibleAnywhere, Category = "AI")
 	float CurrentTimer = 0.f;
+	UPROPERTY(VisibleAnywhere, Category = "AI")
+	float ShootCooldownTimer = 0.f;
+	float ShootCooldown = 2.f;
+	bool PlayerVisible = false;
+	UPROPERTY(EditAnywhere, Category = "Setup")
+		FVector Offset {
+		0.f, 0.f, 0.f
+	};
+
+	//class UCapsuleComponent* Capsule;
+
+	void Shoot();
+
+	FRotator PlayerRotation = FRotator(0.f, 0.f, 0.f);
+	//GetActorRotation
 private:
+
+	UPROPERTY(EditAnywhere, Category = "Setup")
+		TSubclassOf<class ASentryProjectile> ProjectileBlueprint;
 
 	UFUNCTION()
 		void OnPlayerCaught(APawn* APawn);
 
 	UPROPERTY(EditAnywhere, Category = "AI")
-		float VisibleTimer = 5.f;
+		float VisibleTimer = 1.f;
 
+	//UPROPERTY(EditAnywhere, Category = "Setup")
+		//FVector	Offset = FVector (0.f,0.f,0.f);
 
-
-
-
-	bool PlayerVisible = false;	
-
-
-
+		class USceneComponent* Capsule{ nullptr };
 
 
 };

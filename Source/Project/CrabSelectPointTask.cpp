@@ -13,7 +13,7 @@ EBTNodeResult::Type UCrabSelectPointTask::ExecuteTask(UBehaviorTreeComponent& Ow
 {
 
 	AAICrabController* AICon = Cast<AAICrabController>(OwnerComp.GetAIOwner());
-	//ACrabmonster* Crab = Cast<ACrabmonster>(AICon->GetPawn());
+	ACrabmonster* Crab = Cast<ACrabmonster>(AICon->GetPawn());
 	
 	if (AICon)
 	{
@@ -35,7 +35,7 @@ EBTNodeResult::Type UCrabSelectPointTask::ExecuteTask(UBehaviorTreeComponent& Ow
 
 
 		//AActor* Crab = AICon->GetPawn();
-		//Crab->MeleeAttack();
+		Crab->MeleeAttack();
 		
 
 		return EBTNodeResult::Succeeded;

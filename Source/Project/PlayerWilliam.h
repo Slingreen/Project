@@ -45,8 +45,8 @@ protected:
 	virtual void BeginPlay() override;
 
 	//	The bullets
-	/*UPROPERTY(EditAnywhere, Category = "Setup");
-	TSubclassOf<class ASoundBall> SoundBlueprint;*/
+	UPROPERTY(EditAnywhere, Category = "Setup");
+	TSubclassOf<class ASoundBall> SoundBlueprint;
 
 	//	Spawn Position
 	UPROPERTY(EditAnywhere, Category = "Setup");
@@ -70,7 +70,7 @@ private:
 
 
 
-	//void Sound();
+	void Sound();
 public: 
 	void death();
 	void Win();
