@@ -34,6 +34,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Setup")
 		class USceneComponent* SoundSource{ nullptr };
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Setup")
+		bool AmIDead{ false };
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Setup")
+		bool bWin{ false };
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -49,10 +55,23 @@ protected:
 	float TimeBetweenSpawns{ 0.25f };
 	float TimeGone{ 0.f };
 
+	float MaxSneakSpeed{ 300.f };
+	float MaxWalkSpeed{ 600.f };
+	
+
 private:
+	
 	//Functions for movement
 	void MoveForward(float Value);
 	void MoveRight(float Value);
-	//UCharacterMovementComponent* CM;
+
+	void StartFast();
+	void StopFast();
+
+
+
 	void Sound();
+public: 
+	void death();
+	void Win();
 };

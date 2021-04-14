@@ -51,11 +51,22 @@ APlayerWilliam::APlayerWilliam()
 	SoundSource = CreateDefaultSubobject<USceneComponent>(TEXT("SoundSource"));
 	SoundSource->SetupAttachment(RootComponent);
 	SoundSource->SetRelativeLocation(FVector(30.f, 0.f, -90.f));
+
+	//Using this for run speed. Have to set it to other than default 600 = walkspeed
+	GetCharacterMovement()->MaxCustomMovementSpeed = 300.f;
 }
 
 // Called when the game starts or when spawned
 void APlayerWilliam::BeginPlay()
 {
+// Setting up movement speeds:
+	//	600
+	MaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	//	300
+	MaxSneakSpeed = GetCharacterMovement()->MaxCustomMovementSpeed;
+
+	GetCharacterMovement()->MaxWalkSpeed = MaxSneakSpeed;
+
 	Super::BeginPlay();
 	TimeGone = 1.f;
 }
@@ -75,6 +86,10 @@ void APlayerWilliam::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	PlayerInputComponent->BindAxis("Forward", this, &APlayerWilliam::MoveForward);
 	PlayerInputComponent->BindAxis("Right", this, &APlayerWilliam::MoveRight);
+	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &APlayerWilliam::StartFast);
+	PlayerInputComponent->BindAction("Run", IE_Released, this, &APlayerWilliam::StopFast);
+	PlayerInputComponent->BindAction("Die", IE_Pressed, this, &APlayerWilliam::death);
+	//PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerWilliam::Sound);
 }
 
 void APlayerWilliam::MoveForward(float Value)
@@ -83,7 +98,7 @@ void APlayerWilliam::MoveForward(float Value)
 	Direction = GetActorForwardVector();
 	AddMovementInput(Direction, Value);	*/
 
-	if ((Controller != nullptr) && (Value != 0.0f))
+	if ((Controller != nullptr) && (Value != 0.0f) && !AmIDead)
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -91,7 +106,7 @@ void APlayerWilliam::MoveForward(float Value)
 
 		// get forward vector
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		Sound();
+		//Sound();
 		AddMovementInput(Direction, Value);
 	}
 }
@@ -101,7 +116,7 @@ void APlayerWilliam::MoveRight(float Value)
 	/*FVector Direction;
 	Direction = GetActorRightVector();
 	AddMovementInput(Direction, Value);*/
-	if ((Controller != nullptr) && (Value != 0.0f))
+	if ((Controller != nullptr) && (Value != 0.0f) && !AmIDead)
 	{
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -110,12 +125,22 @@ void APlayerWilliam::MoveRight(float Value)
 		// get right vector 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		// add movement in that direction
-		Sound();
+		//Sound();
 		AddMovementInput(Direction, Value);
 	}
 }
 
-void APlayerWilliam::Sound()
+void APlayerWilliam::StartFast()
+{
+	GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
+}
+
+void APlayerWilliam::StopFast()
+{
+	GetCharacterMovement()->MaxWalkSpeed = MaxSneakSpeed;
+}
+
+/*void APlayerWilliam::Sound()
 {
 	UWorld* World = GetWorld();
 
@@ -130,4 +155,14 @@ void APlayerWilliam::Sound()
 			World->SpawnActor<ASoundBall>(SoundBlueprint, SoundSource->GetComponentLocation(), GetActorRotation());
 		}
 	}
+}*/
+
+void APlayerWilliam::death()
+{
+	AmIDead = true;
+}
+
+void APlayerWilliam::Win()
+{
+	bWin = true;
 }
