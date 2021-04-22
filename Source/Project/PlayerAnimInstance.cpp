@@ -27,6 +27,8 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 		FVector LateralSpeed = FVector(TempSpeed.X, TempSpeed.Y, 0.f);
 		MovementSpeed = LateralSpeed.Size();
 
-		bDeath = Cast<APlayerWilliam>(MyPawn)->AmIDead;
+		bDeath = Cast<APlayerWilliam>(MyPawn)->bAmIDead;
+		bInteract = Cast<APlayerWilliam>(MyPawn)->bIsInteracting;
+		bAttack = Cast<APlayerWilliam>(MyPawn)->bIsAttacking;
 	}
 }

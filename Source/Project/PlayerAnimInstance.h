@@ -28,4 +28,10 @@ class PROJECT_API UPlayerAnimInstance : public UAnimInstance
 
 			UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
 				bool bDeath{ false };
+
+			UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
+				bool bInteract{ false };
+
+			UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
+				bool bAttack{ false };
 };
