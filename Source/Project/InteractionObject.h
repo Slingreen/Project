@@ -15,7 +15,16 @@ public:
 	// Sets default values for this actor's properties
 	AInteractionObject();
 
-	void Interacted();
+	virtual void Interacted();
+
+	//Collider
+	UPROPERTY(EditAnywhere, Category = "Basic")
+		class UBoxComponent* Collider{ nullptr };
+
+	//Mesh
+	UPROPERTY(EditAnywhere, Category = "Mesh");
+	UStaticMeshComponent* Door_Mesh{ nullptr };
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
