@@ -23,4 +23,16 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditAnywhere, Category = "Basic")
+		class UBoxComponent* Collider{ nullptr };
+
+	UFUNCTION()
+		void Collision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweeb,
+			const FHitResult& SweepResult);
+
+	//Timer
+	UPROPERTY(EditAnywhere, Category = "Basic")
+		float RotTime{ 9.f };
+
 };
