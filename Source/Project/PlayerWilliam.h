@@ -47,6 +47,13 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
 		bool bIsInteracting{ false };
 
+	// Melee Weapon
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+		TSubclassOf<class AKnifeWeapon> WeaponType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		class AKnifeWeapon* MyWeapon{ nullptr };
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation")
 		bool bIsAttacking{ false };
 

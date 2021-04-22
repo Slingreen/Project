@@ -15,6 +15,7 @@
 #include "GameFramework/SpringArmComponent.h"
 
 #include "InteractionObject.h"
+#include "KnifeWeapon.h"
 
 #include "SoundBall.h"
 //
@@ -58,7 +59,7 @@ APlayerWilliam::APlayerWilliam()
 	InteractCollider->InitBoxExtent(FVector(2.f, 2.f, 2.f));
 	InteractCollider->SetupAttachment(RootComponent);
 	InteractCollider->SetGenerateOverlapEvents(false);
-	InteractCollider->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("R_hand"));
+	InteractCollider->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("InteractSocket"));
 	
 	InteractCollider->OnComponentBeginOverlap.AddDynamic(this, &APlayerWilliam::OnOverlap);
 
@@ -83,6 +84,9 @@ void APlayerWilliam::BeginPlay()
 
 	Super::BeginPlay();
 	TimeGone = 1.f;
+
+	MyWeapon = GetWorld()->SpawnActor<AKnifeWeapon>(WeaponType);
+	MyWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("R_handSocket"));
 }
 
 // Called every frame
@@ -238,7 +242,7 @@ void APlayerWilliam::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
 	bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Enemy Overlaps %s"), *OtherActor->GetName())
+	UE_LOG(LogTemp, Warning, TEXT("Overlap Detected: %s"), *OtherActor->GetName())
 
 		if (OtherActor->IsA(AInteractionObject::StaticClass()))
 		{

@@ -2,14 +2,30 @@
 
 
 #include "KnifeWeapon.h"
+#include "Components/StaticMeshComponent.h"
+#include "Components/SphereComponent.h"
 
 // Sets default values
 AKnifeWeapon::AKnifeWeapon()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	RootBase = CreateDefaultSubobject<USceneComponent>(TEXT("MyRoot"));
+	SetRootComponent(RootBase);
+
+	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponMesh"));
+	WeaponMesh->SetupAttachment(RootBase);
+
+	AttackCollider = CreateDefaultSubobject<USphereComponent>(TEXT("AttackSphere"));
+	AttackCollider->InitSphereRadius(10.f);
+	AttackCollider->SetGenerateOverlapEvents(false);
+	AttackCollider->SetupAttachment(RootBase);
+
+	AttackCollider->OnComponentBeginOverlap.AddDynamic(this, &AKnifeWeapon::OnOverlap);
+
 }
+
 
 // Called when the game starts or when spawned
 void AKnifeWeapon::BeginPlay()
@@ -25,3 +41,8 @@ void AKnifeWeapon::Tick(float DeltaTime)
 
 }
 
+void AKnifeWeapon::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, 
+	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, 
+	bool bFromSweep, const FHitResult& SweepResult)
+{
+}
