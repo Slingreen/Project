@@ -4,11 +4,17 @@
 #include "PlayerWilliam.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
+
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Components/BoxComponent.h"
+
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+
+#include "InteractionObject.h"
 
 #include "SoundBall.h"
 //
@@ -48,6 +54,14 @@ APlayerWilliam::APlayerWilliam()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);	//put it at the end of the boom
 
+	InteractCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("InteractBox"));
+	InteractCollider->InitBoxExtent(FVector(2.f, 2.f, 2.f));
+	InteractCollider->SetupAttachment(RootComponent);
+	InteractCollider->SetGenerateOverlapEvents(false);
+	InteractCollider->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("R_hand"));
+	
+	InteractCollider->OnComponentBeginOverlap.AddDynamic(this, &APlayerWilliam::OnOverlap);
+
 	SoundSource = CreateDefaultSubobject<USceneComponent>(TEXT("SoundSource"));
 	SoundSource->SetupAttachment(RootComponent);
 	SoundSource->SetRelativeLocation(FVector(30.f, 0.f, -90.f));
@@ -77,6 +91,14 @@ void APlayerWilliam::Tick(float DeltaTime)
 	Super::Tick(DeltaTime); 
 	//AddControllerYawInput(1.0f);
 	TimeGone += DeltaTime;
+	TimeBeforeDone += DeltaTime;
+
+	if (bIsInteracting && TimeBeforeDone > TimeInteracting)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("diddle!"));
+		InteractCollider->SetGenerateOverlapEvents(false);
+		bIsInteracting = false;	//only needed until we get animation
+	}
 }
 
 // Called to bind functionality to input
@@ -89,7 +111,10 @@ void APlayerWilliam::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &APlayerWilliam::StartFast);
 	PlayerInputComponent->BindAction("Run", IE_Released, this, &APlayerWilliam::StopFast);
 	PlayerInputComponent->BindAction("Die", IE_Pressed, this, &APlayerWilliam::death);
-	//PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerWilliam::Sound);
+	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerWilliam::StartAttack);
+	PlayerInputComponent->BindAction("Attack", IE_Released, this, &APlayerWilliam::StopAttack);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerWilliam::StartInteract);
+	PlayerInputComponent->BindAction("Interact", IE_Released, this, &APlayerWilliam::StopInteract);
 }
 
 void APlayerWilliam::MoveForward(float Value)
@@ -98,7 +123,7 @@ void APlayerWilliam::MoveForward(float Value)
 	Direction = GetActorForwardVector();
 	AddMovementInput(Direction, Value);	*/
 
-	if ((Controller != nullptr) && (Value != 0.0f) && !AmIDead)
+	if ((Controller != nullptr) && (Value != 0.0f) && !bAmIDead && !bIsInteracting)
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -116,7 +141,7 @@ void APlayerWilliam::MoveRight(float Value)
 	/*FVector Direction;
 	Direction = GetActorRightVector();
 	AddMovementInput(Direction, Value);*/
-	if ((Controller != nullptr) && (Value != 0.0f) && !AmIDead)
+	if ((Controller != nullptr) && (Value != 0.0f) && !bAmIDead && !bIsInteracting)
 	{
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -140,6 +165,48 @@ void APlayerWilliam::StopFast()
 	GetCharacterMovement()->MaxWalkSpeed = MaxSneakSpeed;
 }
 
+void APlayerWilliam::StartAttack()
+{
+	UE_LOG(LogTemp, Warning, TEXT("start attack called!"));
+	bIsAttacking = true;
+}
+
+void APlayerWilliam::StopAttack()
+{
+	UE_LOG(LogTemp, Warning, TEXT("stop attack called!"));
+	bAttackFinished = true;
+}
+
+void APlayerWilliam::AttackFinished()
+{
+	if (!bAttackFinished)
+	{
+		StartAttack();
+	}
+	else
+	{
+		bAttackFinished = false;
+		bIsAttacking = false;
+		UE_LOG(LogTemp, Warning, TEXT("Attack finished"));
+	}
+}
+
+void APlayerWilliam::StartInteract()
+{
+	if (!bIsInteracting) {
+		UE_LOG(LogTemp, Warning, TEXT("fiddle!"));
+		InteractCollider->SetGenerateOverlapEvents(true);
+		bIsInteracting = true;	//only needed until we get animation
+		TimeBeforeDone = 0.0f;
+	}
+}
+
+void APlayerWilliam::StopInteract()
+{
+	
+	
+}
+
 /*void APlayerWilliam::Sound()
 {
 	UWorld* World = GetWorld();
@@ -159,10 +226,22 @@ void APlayerWilliam::StopFast()
 
 void APlayerWilliam::death()
 {
-	AmIDead = true;
+	bAmIDead = true;
 }
 
 void APlayerWilliam::Win()
 {
 	bWin = true;
+}
+
+void APlayerWilliam::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
+	bool bFromSweep, const FHitResult& SweepResult)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Enemy Overlaps %s"), *OtherActor->GetName())
+
+		if (OtherActor->IsA(AInteractionObject::StaticClass()))
+		{
+			Cast<AInteractionObject>(OtherActor)->Interacted();
+		}
 }

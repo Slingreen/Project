@@ -34,11 +34,24 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Setup")
 		class USceneComponent* SoundSource{ nullptr };
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Setup")
-		bool AmIDead{ false };
+	// Interact collider
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Colliders")
+		class UBoxComponent* InteractCollider;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Setup")
 		bool bWin{ false };
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
+		bool bAmIDead{ false };
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
+		bool bIsInteracting{ false };
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation")
+		bool bIsAttacking{ false };
+
+	UFUNCTION(BlueprintCallable)
+		void AttackFinished();
 
 protected:
 	// Called when the game starts or when spawned
@@ -52,8 +65,20 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Setup");
 	FVector SpawnPoint{ 0.f, 0.f, -50.f };
 
+	//	Overlap function
+	UFUNCTION()
+		void OnOverlap(UPrimitiveComponent* OverlappedComponent,
+			AActor* OtherActor,
+			UPrimitiveComponent* OtherComponent,
+			int32 OtherBodyIndex,
+			bool bFromSweep,
+			const FHitResult& SweepResult);
+
 	float TimeBetweenSpawns{ 0.25f };
 	float TimeGone{ 0.f };
+
+	float TimeInteracting{ 2.f };
+	float TimeBeforeDone{ 0.f };
 
 	float MaxSneakSpeed{ 300.f };
 	float MaxWalkSpeed{ 600.f };
@@ -68,9 +93,15 @@ private:
 	void StartFast();
 	void StopFast();
 
+	void StartAttack();
+	void StopAttack();
 
+	void StartInteract();
+	void StopInteract();
 
-	void Sound();
+	bool bAttackFinished{ false };		//Used to make the whole attack animation run
+
+	//void Sound();
 public: 
 	void death();
 	void Win();
