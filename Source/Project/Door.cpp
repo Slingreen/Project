@@ -18,7 +18,6 @@ void ADoor::BeginPlay()
 void ADoor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 	if (Rotate_B) {
 		Rotate();
 	}
@@ -26,17 +25,21 @@ void ADoor::Tick(float DeltaTime)
 
 void ADoor::Interacted() {
 	Rotate_B = true;
+	UE_LOG(LogTemp, Warning, TEXT("Door Interacted"));
+	SetActorEnableCollision(!Rotate_B);
 }
 
 void ADoor::Rotate() {
 	if (Current_Degree >= Max_Degrees && Open == false) {
 		Open = true;
 		Rotate_B = false;
+		SetActorEnableCollision(!Rotate_B);
 		return;
 	}
 	else if (Current_Degree <= Min_Degree && Open == true) {
 		Open = false;
 		Rotate_B = false;
+		SetActorEnableCollision(!Rotate_B);
 		return;
 	}
 	if (Open) {
