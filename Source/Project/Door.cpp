@@ -2,6 +2,12 @@
 
 
 #include "Door.h"
+#include "Components/BoxComponent.h"
+
+ADoor::ADoor() {
+	Collider->InitBoxExtent(FVector(0.2f, 1.9f, 3.4f));
+	Collider->SetRelativeLocation(FVector(0.f, -60.f, 110.f));
+}
 
 // Called when the game starts or when spawned
 void ADoor::BeginPlay()
@@ -25,18 +31,23 @@ void ADoor::Tick(float DeltaTime)
 }
 
 void ADoor::Interacted() {
-	Rotate_B = true;
+	if (Unlocked) {
+		Rotate_B = true;
+		SetActorEnableCollision(!Rotate_B);
+	}
 }
 
 void ADoor::Rotate() {
 	if (Current_Degree >= Max_Degrees && Open == false) {
 		Open = true;
 		Rotate_B = false;
+		SetActorEnableCollision(!Rotate_B);
 		return;
 	}
 	else if (Current_Degree <= Min_Degree && Open == true) {
 		Open = false;
 		Rotate_B = false;
+		SetActorEnableCollision(!Rotate_B);
 		return;
 	}
 	if (Open) {

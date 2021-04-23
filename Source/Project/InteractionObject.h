@@ -23,7 +23,7 @@ public:
 
 	//Mesh
 	UPROPERTY(EditAnywhere, Category = "Mesh");
-	UStaticMeshComponent* Door_Mesh{ nullptr };
+	UStaticMeshComponent* Mesh{ nullptr };
 
 protected:
 	// Called when the game starts or when spawned
