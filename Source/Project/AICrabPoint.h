@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/TargetPoint.h"
+#include "Crabmonster.h"
 #include "AICrabPoint.generated.h"
 
 /**
@@ -16,5 +17,13 @@ class PROJECT_API AAICrabPoint : public ATargetPoint
 
 public:
 
+	UPROPERTY(EditAnywhere, Category = "Setup")
+		class ACharacter* PointOwner{ nullptr };
+
+	ACharacter* ReturnPointOwner();
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 	
 };

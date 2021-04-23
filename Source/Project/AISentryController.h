@@ -30,10 +30,6 @@ class PROJECT_API AAISentryController : public AAIController
 //private:
 
 
-
-		
-
-
 public:
 	AAISentryController();
 
@@ -51,14 +47,10 @@ public:
 
 	//class ASentry* AISentry;
 
-
-
-
-
-	
-
-
-	
+private:
+	TArray<AActor*> PatrolKeys;
+	TArray<AActor*> AllPatrolKeys;
+public:
 
 	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return BlackboardSentry; }
 

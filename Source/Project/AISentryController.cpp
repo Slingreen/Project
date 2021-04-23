@@ -6,6 +6,8 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "PatrolPoint.h"
+#include "Kismet/GameplayStatics.h"
 
 
 
@@ -34,11 +36,39 @@ void AAISentryController::OnPossess(APawn* APawn)
 		if (Sentry->BehaviorTree->BlackboardAsset)
 		{
 			BlackboardSentry->InitializeBlackboard(*(Sentry->BehaviorTree->BlackboardAsset));
-
-
 			BehaviorSentry->StartTree(*Sentry->BehaviorTree);
+		}
+		if (Sentry->Melee)
+		{
+			UGameplayStatics::GetAllActorsOfClass(GetWorld(), APatrolPoint::StaticClass(), AllPatrolKeys);
+			//ArraySize = PatrolKeys.Num();
+			for (int i = 0; i < AllPatrolKeys.Num(); i++)
+			{
+
+				APatrolPoint* PatrolRef = Cast<APatrolPoint>(AllPatrolKeys[i]);
+
+				if (PatrolRef->PointOwner != nullptr)
+				{
 
 
+					if (PatrolRef->PointOwner->GetName() == Sentry->GetName())
+					{
+
+						//The code does what I want it to, but also not
+						//This happens whenever PointOwnerName = CrabMonsterName,
+						//but it still only goes to the points I choose
+						//Only seems to choose one when I try to remove from a tarray istead of adding them to a different one.
+
+						//Also, this only seems to trigger once when I pass it into another tarray.
+
+
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("I own this"));
+						PatrolKeys.Insert(AllPatrolKeys[i], i);
+					}
+					
+				}
+			}
+			BlackboardSentry->SetValueAsObject(PlayerKey, PatrolKeys[0]);
 		}
 	}
 

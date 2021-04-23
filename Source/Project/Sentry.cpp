@@ -17,7 +17,28 @@ ASentry::ASentry()
 
 	PawnSensing = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensing"));
 
+<<<<<<< Updated upstream
 	PawnSensing->SetPeripheralVisionAngle(20.f);
+=======
+	PawnSensing->SetPeripheralVisionAngle(80.f);
+	PawnSensing->SightRadius = 1000.f;
+
+	Capsule = CreateDefaultSubobject<USceneComponent>(TEXT("Capsule"));
+	Capsule->SetupAttachment(RootComponent);
+	Capsule->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
+	EyeMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("EyeMesh"));
+	EyeMesh->SetupAttachment(RootComponent);
+	
+	//EyeMesh->SetupAttachment(RootComponent);
+	
+	//Capsule = GetCapsuleComponent();
+	//RootComponent = Capsule;
+	//GetCapsuleComponent()->USceneComponent::AttachTo(RootComponent);
+	//Sphere->SetupAttachment(RootComponent);
+	//Capsule->SetupAttachment(RootComponent);
+	
+	
+>>>>>>> Stashed changes
 }
 
 bool ASentry::RotateSentry()
@@ -84,6 +105,34 @@ void ASentry::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
+<<<<<<< Updated upstream
+=======
+void ASentry::Shoot()
+{
+	//UCapsuleComponent* Capsule = GetCapsuleComponent();
+	UWorld* World = GetWorld();
+	if (World)
+	{
+
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("BAM!"));
+		//FRotator Rotation = GetActorRotation();
+		//Location = GetActorLocation();
+		//Location.Z += 100;
+		
+		World->SpawnActor<ASentryProjectile>(ProjectileBlueprint, GetActorLocation() + Offset, GetActorRotation());
+		ShootCooldownTimer = 0.f;
+
+		
+																											  
+	}
+
+}
+
+void ASentry::Death()
+{
+}
+
+>>>>>>> Stashed changes
 void ASentry::OnPlayerCaught(APawn* APawn)
 {
 

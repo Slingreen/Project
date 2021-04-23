@@ -22,7 +22,15 @@ ACrabmonster::ACrabmonster()
 	//Root = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
 	Collider->SetGenerateOverlapEvents(true);
 	//SetRootComponent(Root);
+<<<<<<< Updated upstream
 	Collider->AttachTo(RootComponent);
+=======
+	//USkeletalMeshComponent* Mesh = GetMesh();
+	GetMesh()->AttachTo(RootComponent);
+	//GetCapsuleComponent()->AttachTo(RootComponent);
+	Collider->USceneComponent::AttachTo(RootComponent);
+	
+>>>>>>> Stashed changes
 
 }
 

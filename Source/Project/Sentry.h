@@ -33,6 +33,11 @@ public:
 
 	//Used https://www.youtube.com/watch?v=3Z1A825gTA8 as a guide/base for the sentry AI
 
+<<<<<<< Updated upstream
+=======
+	
+	
+>>>>>>> Stashed changes
 	UPROPERTY(EditAnywhere, Category = "AI")
 		class UBehaviorTree* BehaviorTree;
 
@@ -45,9 +50,34 @@ public:
 	UPROPERTY(EditAnywhere, Category = "AI")
 		float SentryIdleSpeed = 0.5f;
 
+<<<<<<< Updated upstream
 	bool RotateSentry();
 
 	float CurrentTimer = 0.f;
+=======
+	void RotateSentry();
+	UPROPERTY(VisibleAnywhere, Category = "AI")
+	float CurrentTimer = 0.f;
+	UPROPERTY(VisibleAnywhere, Category = "AI")
+	float ShootCooldownTimer = 0.f;
+	float ShootCooldown = 2.f;
+	bool PlayerVisible = false;
+	UPROPERTY(EditAnywhere, Category = "Setup")
+		FVector Offset {
+		0.f, 0.f, 0.f
+	};
+
+	UPROPERTY(EditAnywhere, Category = "Setup")
+		bool Melee{ false };
+	
+
+	void Shoot();
+	void Death();
+
+
+	FRotator PlayerRotation = FRotator(0.f, 0.f, 0.f);
+	
+>>>>>>> Stashed changes
 private:
 
 	UFUNCTION()
