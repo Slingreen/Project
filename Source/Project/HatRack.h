@@ -1,0 +1,16 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "InteractionObject.h"
+#include "HatRack.generated.h"
+
+UCLASS()
+class PROJECT_API AHatRack : public AInteractionObject
+{
+	GENERATED_BODY()
+	
+public:
+	void Interacted();
+};
