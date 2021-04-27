@@ -21,22 +21,27 @@ void ADoor::Tick(float DeltaTime)
 
 	if (Rotate_B) {
 		Rotate();
+		SetActorEnableCollision(!Rotate_B);
 	}
 }
 
 void ADoor::Interacted() {
-	Rotate_B = true;
+	if (Unlocked) {
+		Rotate_B = true;
+	}
 }
 
 void ADoor::Rotate() {
 	if (Current_Degree >= Max_Degrees && Open == false) {
 		Open = true;
 		Rotate_B = false;
+		SetActorEnableCollision(!Rotate_B);
 		return;
 	}
 	else if (Current_Degree <= Min_Degree && Open == true) {
 		Open = false;
 		Rotate_B = false;
+		SetActorEnableCollision(!Rotate_B);
 		return;
 	}
 	if (Open) {

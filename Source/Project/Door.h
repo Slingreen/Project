@@ -18,6 +18,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Rotation")
 		int RotSpeed = 2;
 
+	UPROPERTY(EditAnywhere, Category = "Key")
+		bool Unlocked{ false };
+
 private:
 	bool Rotate_B{ false };
 	bool Open{ false };

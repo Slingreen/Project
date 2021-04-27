@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "InteractionObject.h"
+#include "Door.h"
+#include "Hat.h"
 #include "HatRack.generated.h"
 
 UCLASS()
@@ -13,4 +15,8 @@ class PROJECT_API AHatRack : public AInteractionObject
 	
 public:
 	void Interacted();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Linked_Items");
+	ADoor* Door { nullptr };
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Linked_Items");
+	AHat* Hat{ nullptr };
 };
