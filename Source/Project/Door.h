@@ -21,6 +21,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Key")
 		bool Unlocked{ false };
 
+	UPROPERTY(EditAnywhere, Category = "Key")
+		bool Unlocked{ false };
+
 private:
 	bool Rotate_B{ false };
 	bool Open{ false };
