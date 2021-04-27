@@ -18,15 +18,17 @@ void ADoor::BeginPlay()
 void ADoor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 	if (Rotate_B) {
 		Rotate();
+		SetActorEnableCollision(!Rotate_B);
 	}
 }
 
 void ADoor::Interacted() {
-	Rotate_B = true;
-	UE_LOG(LogTemp, Warning, TEXT("Door Interacted"));
-	SetActorEnableCollision(!Rotate_B);
+	if (Unlocked) {
+		Rotate_B = true;
+	}
 }
 
 void ADoor::Rotate() {
