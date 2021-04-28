@@ -47,7 +47,7 @@ public:
 	//Timer
 	UPROPERTY(EditAnywhere, Category = "Setup")
 		float DestructionTime{ 4.f };
-
+	UPROPERTY(VisibleAnywhere, Category = "Setup")
 	float TimeLived{ 0.f };
 
 };

@@ -18,6 +18,7 @@ class PROJECT_API AAISentryController : public AAIController
 
 		//Used https://www.youtube.com/watch?v=3Z1A825gTA8 as a guide/base for the sentry AI
 
+
 		UBehaviorTreeComponent* BehaviorSentry;
 
 		UBlackboardComponent* BlackboardSentry;
@@ -30,10 +31,6 @@ class PROJECT_API AAISentryController : public AAIController
 //private:
 
 
-
-		
-
-
 public:
 	AAISentryController();
 
@@ -41,28 +38,31 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 		FName PlayerKey;
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+		FName MoveKey;
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+		FName Melee;
 	UPROPERTY(EditAnywhere, Category = "AI")
 		bool PlayerVisible = false;
 
 	float SentryYaw = 0.f;
-	FRotator Rotation = FRotator(0.f, 0.f, 0.f);
+	//FRotator Rotation = FRotator(0.f, 0.f, 0.f);
+
+	int Index{ 0 };
 
 
 
 	//class ASentry* AISentry;
 
 
-
-
-
-	
-
-
-	
+	TArray<AActor*> PatrolKeys;
+	TArray<AActor*> AllPatrolKeys;
+public:
 
 	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return BlackboardSentry; }
+	FORCEINLINE TArray<AActor*> GetPatrolKeys() const { return PatrolKeys; }
 
-	class ASentry* BSentry;
+	//class ASentry* BSentry;
 
 
 };

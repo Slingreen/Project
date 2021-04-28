@@ -20,9 +20,17 @@ ACrabmonster::ACrabmonster()
 
 	Collider = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
 	//Root = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
-	
+	Collider->SetGenerateOverlapEvents(true);
 	//SetRootComponent(Root);
-	Collider->USceneComponent::AttachTo(RootComponent);
+//<<<<<<< Updated upstream
+	Collider->AttachTo(RootComponent);
+//=======
+	//USkeletalMeshComponent* Mesh = GetMesh();
+	GetMesh()->AttachTo(RootComponent);
+	//GetCapsuleComponent()->AttachTo(RootComponent);
+	//Collider->USceneComponent::AttachTo(RootComponent);
+	
+//>>>>>>> Stashed changes
 
 }
 
@@ -35,8 +43,7 @@ void ACrabmonster::BeginPlay()
 	{
 		Sensing->OnSeePawn.AddDynamic(this, &ACrabmonster::OnPlayerCaught);
 		Cast<UBoxComponent>(Collider)->OnComponentBeginOverlap.AddDynamic(this, &ACrabmonster::Overlap);
-		Collider->OnComponentEndOverlap.AddDynamic(this, &ACrabmonster::OnOverlapEnd);
-		Collider->SetGenerateOverlapEvents(false);
+		//MeeleeAttack.AddDynamic(this, &ACrabmonster::MeeleeAttack);
 		
 	}
 	
@@ -63,7 +70,7 @@ void ACrabmonster::OnPlayerCaught(APawn* APawn)
 	AAICrabController* AIController = Cast<AAICrabController>(GetController());
 	if (AIController)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("I See You!"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("I See You!"));
 		AIController->SetPlayerCaught(APawn);
 		//AIController->PlayerVisible = true;
 		//CurrentTimer = 0.f;
@@ -75,33 +82,20 @@ void ACrabmonster::OnPlayerCaught(APawn* APawn)
 void ACrabmonster::MeleeAttack()
 {
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Attack was used!"));
-	Collider->SetGenerateOverlapEvents(true);
-
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("PlayerCollision!"));
 
 	
 }
 
-void ACrabmonster::Overlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweeb,
-	const FHitResult& SweepResult)
+void ACrabmonster::Overlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweeb, const FHitResult& SweepResult)
 {
 
 	if (OtherActor->IsA(APlayerWilliam::StaticClass())) {
 
 
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap happened!"));
-		//Collider->SetGenerateOverlapEvents(false);
-		//MeleeAttack();
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("PlayerCollision!"));
+		MeleeAttack();
 	}
-}
-
-void ACrabmonster::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap ended!"));
-	Collider->SetGenerateOverlapEvents(false);
-
 }
 
 

@@ -6,7 +6,6 @@
 #include "GameFramework/Character.h"
 #include "Sentry.generated.h"
 
-
 UCLASS()
 class PROJECT_API ASentry : public ACharacter
 {
@@ -32,10 +31,14 @@ public:
 
 
 
-	//Used https://www.youtube.com/watch?v=3Z1A825gTA8 as a guide/base to set up the blackboard and behavior tree
+	//Used https://www.youtube.com/watch?v=3Z1A825gTA8 as a guide/base for the sentry AI
 
-	//class UCapsuleComponent* Capsule{ nullptr };
+//<<<<<<< Updated upstream
+//=======
 	
+	
+//>>>>>>> Stashed changes
+public:
 	UPROPERTY(EditAnywhere, Category = "AI")
 		class UBehaviorTree* BehaviorTree;
 
@@ -43,15 +46,26 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "AI")
 		class UPawnSensingComponent* PawnSensing;
 
-	UPROPERTY(EditAnywhere, Category = "Setup");
-	UStaticMeshComponent* EyeMesh{ nullptr };
+	//UPROPERTY(EditAnywhere, Category = "Setup")
+	//	class UBoxComponent* Collider{ nullptr };
 
 	FRotator NewRotation = FRotator(0.f, 0.f, 0.f);
 
 	UPROPERTY(EditAnywhere, Category = "AI")
 		float SentryIdleSpeed = 0.5f;
 
+	
+
+
+
+//<<<<<<< Updated upstream
+public:
+
 	void RotateSentry();
+
+	//float CurrentTimer = 0.f;
+//=======
+	//void RotateSentry();
 	UPROPERTY(VisibleAnywhere, Category = "AI")
 	float CurrentTimer = 0.f;
 	UPROPERTY(VisibleAnywhere, Category = "AI")
@@ -63,27 +77,41 @@ public:
 		0.f, 0.f, 0.f
 	};
 
-	//class UCapsuleComponent* Capsule;
+	UPROPERTY(EditAnywhere, Category = "Setup")
+		bool Melee{ false };
+	
 
 	void Shoot();
+	void Death();
+	void GradualRotate();
+	void Attack();
+	UPROPERTY(EditAnywhere, Category = "Setup")
+	bool NeedRotation{ false };
+	float NeedRotationTimer{ 0.f };
+
 
 	FRotator PlayerRotation = FRotator(0.f, 0.f, 0.f);
-	//GetActorRotation
+	
+//>>>>>>> Stashed changes
 private:
-
-	UPROPERTY(EditAnywhere, Category = "Setup")
-		TSubclassOf<class ASentryProjectile> ProjectileBlueprint;
 
 	UFUNCTION()
 		void OnPlayerCaught(APawn* APawn);
 
 	UPROPERTY(EditAnywhere, Category = "AI")
-		float VisibleTimer = 1.f;
+		float VisibleTimer = 5.f;
 
-	//UPROPERTY(EditAnywhere, Category = "Setup")
-		//FVector	Offset = FVector (0.f,0.f,0.f);
+	UPROPERTY(EditAnywhere, Category = "Setup")
+		TSubclassOf<class ASentryProjectile> ProjectileBlueprint;
 
-		class USceneComponent* Capsule{ nullptr };
+
+
+
+
+	//bool PlayerVisible = false;	
+
+
+
 
 
 };
