@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
-#include "AICrabPoint.h"
+#include "PatrolPoint.h"
 #include "AICrabController.generated.h"
 
 /**
@@ -29,6 +29,10 @@ class PROJECT_API AAICrabController : public AAIController
 		FName PastPlayerKey;
 		
 	TArray<AActor*> PatrolKeys;
+	TArray<AActor*> AllPatrolKeys;
+	AActor* PatrolPoint{ nullptr };
+
+
 
 
 	virtual void OnPossess(APawn* APawn) override;
@@ -41,14 +45,11 @@ public:
 
 	int32 CurrentPatrolKey = 0;
 
-
-	
-
-
-
-
 	FORCEINLINE UBlackboardComponent* GetBlackboardComponent() const { return BlackboardCrab; }
 	FORCEINLINE TArray<AActor*> GetPatrolKeys() const { return PatrolKeys; }
+
+private:
+	int ArraySize;
 	
 	
 };

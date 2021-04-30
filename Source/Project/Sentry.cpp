@@ -6,8 +6,9 @@
 #include "Perception/PawnSensingComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "SentryProjectile.h"
-#include "Math/Rotator.h"
-#include "Components/SphereComponent.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Components/BoxComponent.h"
+#include "PlayerWilliam.h"
 
 //#include "Perception/PawnSensingComponent.h"
 
@@ -20,13 +21,21 @@ ASentry::ASentry()
 
 	PawnSensing = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensing"));
 
-	PawnSensing->SetPeripheralVisionAngle(80.f);
+//<<<<<<< Updated upstream
+	PawnSensing->SetPeripheralVisionAngle(40.f);
+//=======
+	//PawnSensing->SetPeripheralVisionAngle(80.f);
 	PawnSensing->SightRadius = 1000.f;
 
-	Capsule = CreateDefaultSubobject<USceneComponent>(TEXT("Capsule"));
-	Capsule->SetupAttachment(RootComponent);
-	Capsule->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
-	EyeMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("EyeMesh"));
+	//Collider = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
+	//Collider->AttachTo(RootComponent);
+	//Collider->SetGenerateOverlapEvents(false);
+
+	//Capsule = CreateDefaultSubobject<USceneComponent>(TEXT("Capsule"));
+	//Capsule->SetupAttachment(RootComponent);
+	//Capsule->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
+	//EyeMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("EyeMesh"));
+	//EyeMesh->SetupAttachment(RootComponent);
 	
 	//EyeMesh->SetupAttachment(RootComponent);
 	
@@ -37,7 +46,10 @@ ASentry::ASentry()
 	//Capsule->SetupAttachment(RootComponent);
 	
 	
+//>>>>>>> Stashed changes
 }
+
+
 
 void ASentry::RotateSentry()
 {
@@ -46,6 +58,7 @@ void ASentry::RotateSentry()
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("I'm Rotating :)"));
 	NewRotation.Yaw += SentryIdleSpeed;
 	SetActorRotation(NewRotation);
+	//Rotation
 	//return true;
 
 }
@@ -66,8 +79,9 @@ void ASentry::BeginPlay()
 // Called every frame
 void ASentry::Tick(float DeltaTime)
 {
-	AAISentryController* AIController = Cast<AAISentryController>(GetController());
+	AAISentryController* AICon = Cast<AAISentryController>(GetController());
 	Super::Tick(DeltaTime);
+	
 
 	if (PlayerVisible)
 	{
@@ -77,17 +91,42 @@ void ASentry::Tick(float DeltaTime)
 
 			PlayerVisible = false;
 			
-			AIController->PlayerVisible = false;
-			AIController->SetPlayerCaught(nullptr); 
+			AICon->PlayerVisible = false;
+			AICon->SetPlayerCaught(nullptr); 
 			CurrentTimer = 0.f;
-			
 
 		}
 		CurrentTimer += DeltaTime;
-		ShootCooldownTimer += DeltaTime;
 
 	}
-	//Shoot();
+	else if (NeedRotation)
+	{
+
+		//FVector Location = GetActorLocation();
+		//FVector PointLocation = AICon->PatrolKeys[AICon->Index]->GetActorLocation();
+		FRotator StopRot = UKismetMathLibrary::FindLookAtRotation(this->GetActorLocation(), AICon->PatrolKeys[AICon->Index]->GetActorLocation());
+		//FRotator StopRot = UKismetMathLibrary::FindLookAtRotation(Location, PointLocation);
+		FRotator StartRot = GetActorRotation();
+		//NewRot.Yaw += SentryIdleSpeed;
+		//SetActorRotation(NewRot);
+		if (NeedRotationTimer>2	)
+		{
+			NeedRotation = false;
+		}
+		else if (NeedRotationTimer<2) 
+		{
+		FRotator NewRot = UKismetMathLibrary::RInterpTo(StartRot, StopRot, DeltaTime, 2);
+		NewRot.Roll = 0.f;
+		NewRot.Pitch = 0.f;
+		SetActorRotation(NewRot);
+		NeedRotationTimer+=DeltaTime;
+		
+		}
+		
+		
+	}
+
+
 
 	//RotateSentry();
 
@@ -104,8 +143,12 @@ void ASentry::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+
+
 }
 
+//<<<<<<< Updated upstream
+//=======
 void ASentry::Shoot()
 {
 	//UCapsuleComponent* Capsule = GetCapsuleComponent();
@@ -119,7 +162,7 @@ void ASentry::Shoot()
 		//Location.Z += 100;
 		
 		World->SpawnActor<ASentryProjectile>(ProjectileBlueprint, GetActorLocation() + Offset, GetActorRotation());
-		ShootCooldownTimer = 0.1f;
+		ShootCooldownTimer = 0.f;
 
 		
 																											  
@@ -127,10 +170,31 @@ void ASentry::Shoot()
 
 }
 
+void ASentry::Death()
+{
+	//temporary, until I can fix the animations that github destroyed 
+	this->Destroy();
+}
+
+void ASentry::GradualRotate()
+{
+	NeedRotation = true;
+	NeedRotationTimer = 0;
+}
+
+void ASentry::Attack()
+{
+
+
+
+}
+
+//>>>>>>> Stashed changes
 void ASentry::OnPlayerCaught(APawn* APawn)
 {
 
 
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("I see you"));
 	AAISentryController* AIController = Cast<AAISentryController>(GetController());
 	if (AIController)
 	{
@@ -139,8 +203,6 @@ void ASentry::OnPlayerCaught(APawn* APawn)
 		AIController->PlayerVisible = true;
 		CurrentTimer = 0.f;
 		PlayerVisible = true;
-		//GetActorLocation(APawn);
-		
 	}
 
 }

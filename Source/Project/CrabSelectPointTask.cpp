@@ -5,44 +5,62 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AICrabController.h"
 #include "CrabMonster.h"
-#include "AICrabPoint.h"
+#include "PatrolPoint.h"
 #include "Math/UnrealMathUtility.h"
 
 
 EBTNodeResult::Type UCrabSelectPointTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+//<<<<<<< Updated upstream
 
-	AAICrabController* AICon = Cast<AAICrabController>(OwnerComp.GetAIOwner());
-	ACrabmonster* Crab = Cast<ACrabmonster>(AICon->GetPawn());
+	//AAICrabController* AICon = Cast<AAICrabController>(OwnerComp.GetAIOwner());
+	//ACrabmonster* Crab = Cast<ACrabmonster>(AICon->GetPawn());
+//=======
+//>>>>>>> Stashed changes
 	
+	AAICrabController* AICon = Cast<AAICrabController>(OwnerComp.GetAIOwner());
+	//ACrabmonster* Crab = Cast<ACrabmonster>(AICon->GetPawn());
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Selecting new point"));
 	if (AICon)
 	{
 		UBlackboardComponent* BlackboardComp = AICon->GetBlackboardComponent();
 
-		AAICrabPoint* CurrentKey = Cast<AAICrabPoint>(BlackboardComp->GetValueAsObject("MoveKey"));
+		APatrolPoint* CurrentKey = Cast<APatrolPoint>(BlackboardComp->GetValueAsObject("MoveKey"));
 
 		TArray<AActor*> AvailablePatrolKeys = AICon->GetPatrolKeys();
 
-		Size = AvailablePatrolKeys.Num()-1;
+		APatrolPoint* NextPatrolKey = nullptr;
 
-		AAICrabPoint* NextPatrolKey = nullptr;
+		Size = AvailablePatrolKeys.Num() - 1;
 
-		Index = FMath::RandRange(0, Size);
+		//for (int i = 0; i < 1; i++)
+		//{
+			//PatrolPoint = AvailablePatrolKeys[0];
+			Index = FMath::RandRange(0, Size);
 
-		NextPatrolKey = Cast<AAICrabPoint>(AvailablePatrolKeys[Index]);
+			NextPatrolKey = Cast<APatrolPoint>(AvailablePatrolKeys[Index]);
 
-		BlackboardComp->SetValueAsObject("MoveKey", NextPatrolKey);
+			
+			
+			/*if (CurrentKey == NextPatrolKey)
+			{
+				i--;
+			}*/
 
 
+//<<<<<<< Updated upstream
 		//AActor* Crab = AICon->GetPawn();
-		Crab->MeleeAttack();
+		//Crab->MeleeAttack();
 		
+//=======
+			//AActor* Crab = AICon->GetPawn();
+			//Crab->MeleeAttack();
+//>>>>>>> Stashed changes
 
+		//}
+		BlackboardComp->SetValueAsObject("MoveKey", NextPatrolKey);
 		return EBTNodeResult::Succeeded;
 
-		
-
-		
 
 	}
 
