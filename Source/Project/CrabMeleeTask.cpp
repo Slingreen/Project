@@ -5,22 +5,21 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AICrabController.h"
 #include "CrabMonster.h"
+#include "PlayerWilliam.h"
 
 EBTNodeResult::Type UCrabMeleeTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 
-	AAICrabController* AICon = Cast<AAICrabController>(OwnerComp.GetAIOwner());
-	ACrabmonster* Crab = Cast<ACrabmonster>(AICon->GetPawn());
-	if (AICon)
-	{
+	//AAICrabController* AICon = Cast<AAICrabController>(OwnerComp.GetAIOwner());
+	//ACrabmonster* Crab = Cast<ACrabmonster>(AICon->GetPawn());
+	//if (AICon)
+	//{
 	
-		Crab->MeleeAttack();
+		//Crab->MeleeAttack();
 
-		return EBTNodeResult::Succeeded;
-	}
-	else {
-
-
-		return EBTNodeResult::Failed;
-	}
+	//}
+	APlayerController* PlayerController = Cast<APlayerController>(GEngine->GetFirstLocalPlayerController(GetWorld()));
+	APlayerWilliam* Player = Cast<APlayerWilliam>(PlayerController->GetCharacter());
+	Player->death();
+	return EBTNodeResult::Succeeded;
 }

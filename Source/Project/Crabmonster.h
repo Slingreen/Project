@@ -56,10 +56,6 @@ private:
 			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweeb,
 			const FHitResult& SweepResult);
 
-	UFUNCTION()
-		void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
-			class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
 	
 
 };

@@ -14,17 +14,8 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 
-#include "InteractionObject.h"
 #include "KnifeWeapon.h"
-
-#include "SoundBall.h"
-//
-//#include "Camera/CameraComponent.h"
-//#include "Camera/CameraActor.h"
-//
-//#include "GameFramework/SpringArmComponent.h"
-//#include "GameFramework/CharacterMovementComponent.h"
-//#include "GameFramework/Controller.h"
+#include "InteractionBox.h"
 
 // Sets default values
 APlayerWilliam::APlayerWilliam()
@@ -47,25 +38,10 @@ APlayerWilliam::APlayerWilliam()
 
 	CameraBoom->bInheritYaw = false;				// Ignore Yaw rotations - since we want a fixed camera
 	CameraBoom->bDoCollisionTest = false;			// Should not zoom closer to player when colliding  - since we want a fixed camera
-
-	//CameraBoom->bEnableCameraLag = true;	//just to let the camera lag and not be that fixed at the end of the boom
-	//CameraBoom->CameraLagSpeed = 40.f;		//how much lag
 	
 	// Create a follow camera - the actual camera the game is viewed through
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);	//put it at the end of the boom
-
-	InteractCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("InteractBox"));
-	InteractCollider->InitBoxExtent(FVector(2.f, 2.f, 2.f));
-	InteractCollider->SetupAttachment(RootComponent);
-	InteractCollider->SetGenerateOverlapEvents(false);
-	InteractCollider->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("InteractSocket"));
-	
-	InteractCollider->OnComponentBeginOverlap.AddDynamic(this, &APlayerWilliam::OnOverlap);
-
-	SoundSource = CreateDefaultSubobject<USceneComponent>(TEXT("SoundSource"));
-	SoundSource->SetupAttachment(RootComponent);
-	SoundSource->SetRelativeLocation(FVector(30.f, 0.f, -90.f));
 
 	//Using this for run speed. Have to set it to other than default 600 = walkspeed
 	GetCharacterMovement()->MaxCustomMovementSpeed = 300.f;
@@ -85,24 +61,19 @@ void APlayerWilliam::BeginPlay()
 	Super::BeginPlay();
 	TimeGone = 1.f;
 
+	MyInteraction = GetWorld()->SpawnActor<AInteractionBox>(InteractionBox);
+	MyInteraction->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("InteractSocket"));
+
 	MyWeapon = GetWorld()->SpawnActor<AKnifeWeapon>(WeaponType);
 	MyWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("R_handSocket"));
+
+	bIsInteracting = false;
 }
 
 // Called every frame
 void APlayerWilliam::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime); 
-	//AddControllerYawInput(1.0f);
-	TimeGone += DeltaTime;
-	TimeBeforeDone += DeltaTime;
-
-	if (bIsInteracting && TimeBeforeDone > TimeInteracting)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("diddle!"));
-		InteractCollider->SetGenerateOverlapEvents(false);
-		bIsInteracting = false;	//only needed until we get animation
-	}
 }
 
 // Called to bind functionality to input
@@ -123,10 +94,6 @@ void APlayerWilliam::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void APlayerWilliam::MoveForward(float Value)
 {
-	/*FVector Direction;
-	Direction = GetActorForwardVector();
-	AddMovementInput(Direction, Value);	*/
-
 	if ((Controller != nullptr) && (Value != 0.0f) && !bAmIDead && !bIsInteracting)
 	{
 		// find out which way is forward
@@ -135,16 +102,12 @@ void APlayerWilliam::MoveForward(float Value)
 
 		// get forward vector
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		//Sound();
 		AddMovementInput(Direction, Value);
 	}
 }
 
 void APlayerWilliam::MoveRight(float Value)
 {
-	/*FVector Direction;
-	Direction = GetActorRightVector();
-	AddMovementInput(Direction, Value);*/
 	if ((Controller != nullptr) && (Value != 0.0f) && !bAmIDead && !bIsInteracting)
 	{
 		// find out which way is right
@@ -154,7 +117,6 @@ void APlayerWilliam::MoveRight(float Value)
 		// get right vector 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		// add movement in that direction
-		//Sound();
 		AddMovementInput(Direction, Value);
 	}
 }
@@ -197,36 +159,33 @@ void APlayerWilliam::AttackFinished()
 
 void APlayerWilliam::StartInteract()
 {
-	if (!bIsInteracting) {
-		UE_LOG(LogTemp, Warning, TEXT("fiddle!"));
-		InteractCollider->SetGenerateOverlapEvents(true);
-		bIsInteracting = true;	//only needed until we get animation
-		TimeBeforeDone = 0.0f;
+	UE_LOG(LogTemp, Warning, TEXT("fiddle!"));
+	bIsInteracting = true;
+	if (bIsInteracting)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("bIsInteracting"));
 	}
 }
 
 void APlayerWilliam::StopInteract()
 {
-	
-	
+	UE_LOG(LogTemp, Warning, TEXT("diddle!"));
+	bInteractFinished = true;
 }
 
-/*void APlayerWilliam::Sound()
+void APlayerWilliam::InteractFinished()
 {
-	UWorld* World = GetWorld();
-
-	if (World)	//	check if World is valid
+	if (!bInteractFinished)
 	{
-		
-		//	If it is time to spawn more enemies and the game has not spawned all enemies yet
-		if (TimeGone > TimeBetweenSpawns)
-		{
-			TimeGone = 0.f;
-			//	Spawns bullet at SpawnPoint 
-			World->SpawnActor<ASoundBall>(SoundBlueprint, SoundSource->GetComponentLocation(), GetActorRotation());
-		}
+		StartAttack();
 	}
-}*/
+	else
+	{
+		bInteractFinished = false;
+		bIsInteracting = false;
+		UE_LOG(LogTemp, Warning, TEXT("Interact finished"));
+	}
+}
 
 void APlayerWilliam::death()
 {
@@ -243,9 +202,4 @@ void APlayerWilliam::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	bool bFromSweep, const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Overlap Detected: %s"), *OtherActor->GetName())
-
-		if (OtherActor->IsA(AInteractionObject::StaticClass()))
-		{
-			Cast<AInteractionObject>(OtherActor)->Interacted();
-		}
 }
