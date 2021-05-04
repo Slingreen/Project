@@ -4,6 +4,7 @@
 #include "KnifeWeapon.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/SphereComponent.h"
+#include "Sentry.h"
 
 // Sets default values
 AKnifeWeapon::AKnifeWeapon()
@@ -45,4 +46,11 @@ void AKnifeWeapon::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, 
 	bool bFromSweep, const FHitResult& SweepResult)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Overlap Detected: %s"), *OtherActor->GetName())
+	if (OtherActor->IsA(ASentry::StaticClass()))
+	{
+
+		Cast<ASentry>(OtherActor)->Death();
+
+	}
 }
