@@ -18,19 +18,16 @@ public:
 
 	//Collider
 	UPROPERTY(EditAnywhere, Category = "Basic")
-		class UBoxComponent* Collider{ nullptr };
+	class UBoxComponent* Collider{ nullptr };
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Linked_Items");
 	AWall_UPDOWN* Walls{ nullptr };
 
-	UFUNCTION()
-		void OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweeb,
-			const FHitResult& SweepResult);
-	UFUNCTION()
-		void OverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-			UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweeb,
-			const FHitResult& SweepResult);
+	UFUNCTION(BlueprintCallable, Category = "OverlapEvents")
+		void Enter();
+
+	UFUNCTION(BlueprintCallable, Category = "OverlapEvents")
+		void Exit();
 
 protected:
 	// Called when the game starts or when spawned
@@ -39,4 +36,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+private:
+	bool WallsDown{ false };
 };

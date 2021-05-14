@@ -10,11 +10,9 @@ AWall_UPDOWN::AWall_UPDOWN()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	//Collider
-	Collider = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
-	RootComponent = Collider;
-
-	Collider->SetGenerateOverlapEvents(true);
+	//Mesh
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	RootComponent = Mesh;
 }
 
 void AWall_UPDOWN::WallUp()
