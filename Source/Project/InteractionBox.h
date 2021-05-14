@@ -28,6 +28,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")
 		class UBoxComponent* InteractCollider{ nullptr };
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")
+		FString thought = "I interacted";
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Setup")
+		bool bThought{ false };
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -39,4 +44,5 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+private:
 };

@@ -47,6 +47,8 @@ APlayerWilliam::APlayerWilliam()
 	GetCharacterMovement()->MaxCustomMovementSpeed = 300.f;
 }
 
+
+
 // Called when the game starts or when spawned
 void APlayerWilliam::BeginPlay()
 {
@@ -202,4 +204,11 @@ void APlayerWilliam::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	bool bFromSweep, const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Overlap Detected: %s"), *OtherActor->GetName())
+}
+
+
+void APlayerWilliam::Hiding(FVector p)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Hiding test"));
+	SetActorLocation(p);
 }

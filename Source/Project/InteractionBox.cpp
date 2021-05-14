@@ -3,7 +3,9 @@
 
 #include "InteractionBox.h"
 #include "Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"	
 
+#include "PlayerWilliam.h"
 #include "InteractionObject.h"
 
 // Sets default values
@@ -21,6 +23,9 @@ AInteractionBox::AInteractionBox()
 	InteractCollider->SetGenerateOverlapEvents(false);
 
 	InteractCollider->OnComponentBeginOverlap.AddDynamic(this, &AInteractionBox::OnOverlap);
+
+	
+	
 }
 
 // Called when the game starts or when spawned
@@ -48,5 +53,8 @@ void AInteractionBox::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Interacting true!"));
 			Cast<AInteractionObject>(OtherActor)->Interacted();
+			bThought = true;
+			//	This works to teleport now
+			//Cast<APlayerWilliam>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->Hiding(FVector(1000.f, 1000.f, 1000.f));
 		}
-}
+} 

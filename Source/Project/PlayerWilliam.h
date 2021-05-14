@@ -69,6 +69,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
 		bool bAmIDead{ false };
 
+	void Hiding(FVector p);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
