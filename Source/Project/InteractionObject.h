@@ -19,14 +19,14 @@ public:
 
 	//Collider
 	UPROPERTY(EditAnywhere, Category = "Basic")
-		class UBoxComponent* Collider{ nullptr };
+	class UBoxComponent* Collider{ nullptr };
 
 	//Mesh
 	UPROPERTY(EditAnywhere, Category = "Mesh");
 	UStaticMeshComponent* Door_Mesh{ nullptr }; //I made this intended for the Doors first
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Comment")
-		FString Comment {""};
+	FString Comment {""};
 
 protected:
 	// Called when the game starts or when spawned
