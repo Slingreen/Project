@@ -19,6 +19,8 @@ AInteractionObject::AInteractionObject()
 	Collider->SetupAttachment(RootComponent);
 
 	Collider->SetGenerateOverlapEvents(true);
+
+	Door_Mesh->SetRenderCustomDepth(true);
 }
 
 void AInteractionObject::Interacted()
