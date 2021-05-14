@@ -40,7 +40,7 @@ void ARoomTrigger::BeginPlay()
 	Cast<UBoxComponent>(RootComponent)->OnComponentBeginOverlap.AddDynamic(this, &ARoomTrigger::OverlapBegin);
 	/*Cast<UBoxComponent>(RootComponent)->OnActorEndOverlap.AddDynamic(this, &ARoomTrigger::OverlapEnd);
 	Collider->OnComponentEndOverlap.AddDynamic(this, &ARoomTrigger::OverlapEnd);*/
-	Cast<UBoxComponent>(RootComponent)->OnComponentEndOverlap.AddDynamic(this, &ARoomTrigger::OverlapEnd);
+	//Cast<UBoxComponent>(RootComponent)->OnComponentEndOverlap.AddDynamic(this, &ARoomTrigger::OverlapEnd);
 }
 
 // Called every frame
