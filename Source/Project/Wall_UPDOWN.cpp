@@ -1,42 +1,45 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "InteractionObject.h"
+#include "Wall_UPDOWN.h"
 #include "Components/BoxComponent.h"
 
 // Sets default values
-AInteractionObject::AInteractionObject()
+AWall_UPDOWN::AWall_UPDOWN()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	//Mesh
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	RootComponent = Mesh;
-
 	//Collider
 	Collider = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
-	Collider->SetupAttachment(RootComponent);
+	RootComponent = Collider;
 
 	Collider->SetGenerateOverlapEvents(true);
-
-	Door_Mesh->SetRenderCustomDepth(true);
 }
 
-void AInteractionObject::Interacted()
+void AWall_UPDOWN::WallUp()
 {
+	FVector Loc = GetActorLocation();
+	Loc.Z += Diff;
+	SetActorLocation(Loc);
+}
 
+void AWall_UPDOWN::WallDown()
+{
+	FVector Loc = GetActorLocation();
+	Loc.Z -= Diff;
+	SetActorLocation(Loc);
 }
 
 // Called when the game starts or when spawned
-void AInteractionObject::BeginPlay()
+void AWall_UPDOWN::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void AInteractionObject::Tick(float DeltaTime)
+void AWall_UPDOWN::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 

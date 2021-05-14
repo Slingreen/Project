@@ -4,26 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "InteractionObject.generated.h"
+#include "Wall_UPDOWN.generated.h"
 
 UCLASS()
-class PROJECT_API AInteractionObject : public AActor
+class PROJECT_API AWall_UPDOWN : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AInteractionObject();
+	AWall_UPDOWN();
 
-	virtual void Interacted();
+	void WallUp();
+	void WallDown();
 
 	//Collider
 	UPROPERTY(EditAnywhere, Category = "Basic")
 		class UBoxComponent* Collider{ nullptr };
-
-	//Mesh
-	UPROPERTY(EditAnywhere, Category = "Mesh");
-	UStaticMeshComponent* Door_Mesh{ nullptr }; //I made this intended for the Doors first
 
 protected:
 	// Called when the game starts or when spawned
@@ -33,4 +30,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+private:
+	const int Diff{ 190 };
 };
