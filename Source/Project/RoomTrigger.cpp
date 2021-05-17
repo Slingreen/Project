@@ -18,29 +18,28 @@ ARoomTrigger::ARoomTrigger()
 	Collider->SetGenerateOverlapEvents(true);
 }
 
-void ARoomTrigger::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweeb, const FHitResult& SweepResult)
+void ARoomTrigger::Enter()
 {
-	if (OtherActor->IsA(APlayerWilliam::StaticClass())) {
+	UE_LOG(LogTemp, Warning, TEXT("Walls Down"));
+	if (!WallsDown) {
 		Walls->WallDown();
 	}
+	WallsDown = true;
 }
 
-void ARoomTrigger::OverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweeb, const FHitResult& SweepResult)
+void ARoomTrigger::Exit()
 {
-	if (OtherActor->IsA(APlayerWilliam::StaticClass())) {
+	UE_LOG(LogTemp, Warning, TEXT("Walls Up"));
+	if (WallsDown) {
 		Walls->WallUp();
 	}
+	WallsDown = false;
 }
 
 // Called when the game starts or when spawned
 void ARoomTrigger::BeginPlay()
 {
 	Super::BeginPlay();
-
-	Cast<UBoxComponent>(RootComponent)->OnComponentBeginOverlap.AddDynamic(this, &ARoomTrigger::OverlapBegin);
-	/*Cast<UBoxComponent>(RootComponent)->OnActorEndOverlap.AddDynamic(this, &ARoomTrigger::OverlapEnd);
-	Collider->OnComponentEndOverlap.AddDynamic(this, &ARoomTrigger::OverlapEnd);*/
-	//Cast<UBoxComponent>(RootComponent)->OnComponentEndOverlap.AddDynamic(this, &ARoomTrigger::OverlapEnd);
 }
 
 // Called every frame

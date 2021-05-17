@@ -18,9 +18,9 @@ public:
 	void WallUp();
 	void WallDown();
 
-	//Collider
+	//Mesh
 	UPROPERTY(EditAnywhere, Category = "Basic")
-		class UBoxComponent* Collider{ nullptr };
+		UStaticMeshComponent* Mesh{ nullptr };
 
 protected:
 	// Called when the game starts or when spawned
