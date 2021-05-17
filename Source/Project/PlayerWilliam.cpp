@@ -191,7 +191,8 @@ void APlayerWilliam::InteractFinished()
 
 void APlayerWilliam::death()
 {
-	bAmIDead = true;
+	Hiding(FVector(140.f, -528.f, 0.f));
+	//bAmIDead = true;
 }
 
 void APlayerWilliam::Win()
@@ -210,5 +211,15 @@ void APlayerWilliam::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 void APlayerWilliam::Hiding(FVector p)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Hiding test"));
-	SetActorLocation(p);
+	if (bHide)
+	{
+		bHide = false;
+		SetActorLocation(preHide);
+	}
+	else
+	{
+		bHide = true;
+		preHide = GetActorLocation();
+		SetActorLocation(p);
+	}
 }

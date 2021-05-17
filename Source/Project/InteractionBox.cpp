@@ -53,6 +53,7 @@ void AInteractionBox::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Interacting true!"));
 			Cast<AInteractionObject>(OtherActor)->Interacted();
+			thought = Cast<AInteractionObject>(OtherActor)->Comment;
 			bThought = true;
 			//	This works to teleport now
 			//Cast<APlayerWilliam>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->Hiding(FVector(1000.f, 1000.f, 1000.f));

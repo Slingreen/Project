@@ -92,7 +92,9 @@ protected:
 	
 
 private:
-	
+	FVector preHide{ 0.f, 0.f, 0.f };
+	bool bHide = false;
+
 	//Functions for movement
 	void MoveForward(float Value);
 	void MoveRight(float Value);
