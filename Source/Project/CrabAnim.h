@@ -21,11 +21,12 @@ public:
 		void CrabUpdateAnimProperties();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
-		class APawn* MyPawn{ nullptr };
+		class APawn* CrabPawn{ nullptr };
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
 		float CrabMoveSpeed{ 0.f };
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
 		bool CrabAttacking{ false };
+
 };

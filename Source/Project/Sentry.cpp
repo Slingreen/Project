@@ -196,7 +196,11 @@ void ASentry::Death()
 void ASentry::DeathEnd()
 {
 	//AmIDead = false;
+	AAISentryController* AIController = Cast<AAISentryController>(GetController());
+	//AIController->Destroy();
+	this->UninitializeComponents();
 	this->Destroy();
+	
 }
 
 void ASentry::GradualRotate()

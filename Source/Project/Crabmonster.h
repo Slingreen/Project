@@ -34,8 +34,8 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "AI")
 		class UPawnSensingComponent* Sensing;
 
-	UPROPERTY(EditAnywhere, Category = "Setup")
-		class UBoxComponent* Collider{ nullptr };
+	//UPROPERTY(EditAnywhere, Category = "Setup")
+		//class UBoxComponent* Collider{ nullptr };
 
 	//UPROPERTY(EditAnywhere, Category = "Setup")
 		//class UBoxComponent* Root{ nullptr };
@@ -47,6 +47,10 @@ public:
 		void AttackKill();
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation")
 		bool AmIAttacking{ false };
+	UFUNCTION(BlueprintCallable)
+		void AttackBottom();
+	UFUNCTION(BlueprintCallable)
+		void DisableOverlap();
 
 
 

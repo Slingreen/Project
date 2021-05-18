@@ -6,26 +6,26 @@
 
 void UCrabAnim::NativeInitializeAnimation()
 {
-	if (MyPawn == nullptr)
+	if (CrabPawn == nullptr)
 	{
-		MyPawn = TryGetPawnOwner();
+		CrabPawn = TryGetPawnOwner();
 	}
 }
 
 void UCrabAnim::CrabUpdateAnimProperties()
 {
-	if (MyPawn == nullptr)
+	if (CrabPawn == nullptr)
 	{
-		MyPawn = TryGetPawnOwner();
+		CrabPawn = TryGetPawnOwner();
 	}
 
-	if (MyPawn)
+	if (CrabPawn)
 	{
 
-		FVector TempSpeed = MyPawn->GetVelocity();
+		FVector TempSpeed = CrabPawn->GetVelocity();
 		FVector LateralSpeed = FVector(TempSpeed.X, TempSpeed.Y, 0.f);
 		CrabMoveSpeed = LateralSpeed.Size();
-		CrabAttacking = Cast<ACrabmonster>(MyPawn)->AmIAttacking;
+		CrabAttacking = Cast<ACrabmonster>(CrabPawn)->AmIAttacking;
 
 
 	}
