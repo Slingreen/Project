@@ -40,7 +40,7 @@ void AStairs::Tick(float DeltaTime)
 
 void AStairs::ChangeFloorCollision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweeb, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Level2 loaded"));
+	//UE_LOG(LogTemp, Warning, TEXT("Level2 loaded"));
 	if (OtherActor->IsA(APlayerWilliam::StaticClass())) {
 		UGameplayStatics::OpenLevel(GetWorld(), NxtLvl);
 	}
