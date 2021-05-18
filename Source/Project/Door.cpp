@@ -28,6 +28,10 @@ void ADoor::Tick(float DeltaTime)
 void ADoor::Interacted() {
 	if (Unlocked) {
 		Rotate_B = true;
+		Comment = "Yes, It's unlocked";
+	}
+	else {
+		Comment = "Huh, It's locked";
 	}
 }
 

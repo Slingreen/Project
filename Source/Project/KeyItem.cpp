@@ -4,6 +4,8 @@
 #include "KeyItem.h"
 
 void AKeyItem::Interacted() {
-	Door->Unlocked = true;
+	for (int i = 0; i < Door.Max(); i++) {
+		Door[i]->Unlocked = true;
+	}
 	this->Destroy();
 }
