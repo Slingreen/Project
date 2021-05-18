@@ -22,7 +22,9 @@ void ARoomTrigger::Enter()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Walls Down"));
 	if (!WallsDown) {
-		Walls->WallDown();
+		for (int i = 0; i < WallsArr.Max(); i++) {
+			WallsArr[i]->WallDown();
+		}
 	}
 	WallsDown = true;
 }
@@ -31,7 +33,9 @@ void ARoomTrigger::Exit()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Walls Up"));
 	if (WallsDown) {
-		Walls->WallUp();
+		for (int i = 0; i < WallsArr.Max(); i++) {
+			WallsArr[i]->WallUp();
+		}
 	}
 	WallsDown = false;
 }
