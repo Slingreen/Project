@@ -39,8 +39,14 @@ public:
 
 	//UPROPERTY(EditAnywhere, Category = "Setup")
 		//class UBoxComponent* Root{ nullptr };
-	UFUNCTION()
+	//UFUNCTION()
 		void MeleeAttack();
+	UFUNCTION(BlueprintCallable)
+		void AttackEnd();
+	UFUNCTION(BlueprintCallable)
+		void AttackKill();
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation")
+		bool AmIAttacking{ false };
 
 
 

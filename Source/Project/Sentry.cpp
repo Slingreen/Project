@@ -9,6 +9,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/BoxComponent.h"
 #include "PlayerWilliam.h"
+#include "Components/SpotLightComponent.h"
 
 //#include "Perception/PawnSensingComponent.h"
 
@@ -20,6 +21,13 @@ ASentry::ASentry()
 
 
 	PawnSensing = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensing"));
+
+	Spotlight = CreateDefaultSubobject<USpotLightComponent>(TEXT("VisionLight"));
+	//SetRootComponent(GetMesh());
+	//GetCapsuleComponent
+	Spotlight->SetupAttachment(RootComponent);
+	//RootComponent = Spotlight;
+	//Spotlight->SetWorldLocation(GetActorLocation());
 
 //<<<<<<< Updated upstream
 	PawnSensing->SetPeripheralVisionAngle(40.f);
@@ -104,25 +112,27 @@ void ASentry::Tick(float DeltaTime)
 
 		//FVector Location = GetActorLocation();
 		//FVector PointLocation = AICon->PatrolKeys[AICon->Index]->GetActorLocation();
-		FRotator StopRot = UKismetMathLibrary::FindLookAtRotation(this->GetActorLocation(), AICon->PatrolKeys[AICon->Index]->GetActorLocation());
-		//FRotator StopRot = UKismetMathLibrary::FindLookAtRotation(Location, PointLocation);
-		FRotator StartRot = GetActorRotation();
-		//NewRot.Yaw += SentryIdleSpeed;
-		//SetActorRotation(NewRot);
-		if (NeedRotationTimer>2	)
+		if (!AmIDead)
 		{
-			NeedRotation = false;
+			FRotator StopRot = UKismetMathLibrary::FindLookAtRotation(this->GetActorLocation(), AICon->PatrolKeys[AICon->Index]->GetActorLocation());
+			//FRotator StopRot = UKismetMathLibrary::FindLookAtRotation(Location, PointLocation);
+			FRotator StartRot = GetActorRotation();
+			//NewRot.Yaw += SentryIdleSpeed;
+			//SetActorRotation(NewRot);
+			if (NeedRotationTimer > 2)
+			{
+				NeedRotation = false;
+			}
+			else if (NeedRotationTimer < 2)
+			{
+				FRotator NewRot = UKismetMathLibrary::RInterpTo(StartRot, StopRot, DeltaTime, 2);
+				NewRot.Roll = 0.f;
+				NewRot.Pitch = 0.f;
+				SetActorRotation(NewRot);
+				NeedRotationTimer += DeltaTime;
+
+			}
 		}
-		else if (NeedRotationTimer<2) 
-		{
-		FRotator NewRot = UKismetMathLibrary::RInterpTo(StartRot, StopRot, DeltaTime, 2);
-		NewRot.Roll = 0.f;
-		NewRot.Pitch = 0.f;
-		SetActorRotation(NewRot);
-		NeedRotationTimer+=DeltaTime;
-		
-		}
-		
 		
 	}
 
@@ -151,28 +161,41 @@ void ASentry::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 //=======
 void ASentry::Shoot()
 {
+
+	AmIShooting = true;
 	//UCapsuleComponent* Capsule = GetCapsuleComponent();
+
+
+}
+
+void ASentry::ShootEnd()
+{
+	AmIShooting = false;
+}
+
+void ASentry::ShootSpawn()
+{
+
 	UWorld* World = GetWorld();
 	if (World)
 	{
 
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("BAM!"));
-		//FRotator Rotation = GetActorRotation();
-		//Location = GetActorLocation();
-		//Location.Z += 100;
-		
 		World->SpawnActor<ASentryProjectile>(ProjectileBlueprint, GetActorLocation() + Offset, GetActorRotation());
 		ShootCooldownTimer = 0.f;
-
-		
-																											  
 	}
-
 }
 
 void ASentry::Death()
 {
-	//temporary, until I can fix the animations that github destroyed 
+	//temporary, until I can fix the animations that github destroyed
+	AmIDead = true;
+	UnPossessed();
+	//this->Destroy();
+}
+
+void ASentry::DeathEnd()
+{
+	//AmIDead = false;
 	this->Destroy();
 }
 
@@ -184,9 +207,22 @@ void ASentry::GradualRotate()
 
 void ASentry::Attack()
 {
+	AmIAttacking = true;
 
+}
 
+void ASentry::AttackEnd()
+{
 
+	AmIAttacking = false;
+
+}
+
+void ASentry::AttackKill()
+{
+	APlayerController* PlayerController = Cast<APlayerController>(GEngine->GetFirstLocalPlayerController(GetWorld()));
+	APlayerWilliam* Player = Cast<APlayerWilliam>(PlayerController->GetCharacter());
+	Player->death();
 }
 
 //>>>>>>> Stashed changes

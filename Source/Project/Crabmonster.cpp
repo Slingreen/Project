@@ -87,6 +87,14 @@ void ACrabmonster::MeleeAttack()
 	
 }
 
+void ACrabmonster::AttackEnd()
+{
+}
+
+void ACrabmonster::AttackKill()
+{
+}
+
 void ACrabmonster::Overlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweeb, const FHitResult& SweepResult)
 {
 
