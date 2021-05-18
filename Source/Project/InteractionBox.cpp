@@ -43,6 +43,8 @@ void AInteractionBox::Tick(float DeltaTime)
 }
 
 
+
+
 void AInteractionBox::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
 	bool bFromSweep, const FHitResult& SweepResult)
@@ -55,6 +57,7 @@ void AInteractionBox::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 			Cast<AInteractionObject>(OtherActor)->Interacted();
 			thought = Cast<AInteractionObject>(OtherActor)->Comment;
 			bThought = true;
+			InteractCollider->SetGenerateOverlapEvents(false);
 			//	This works to teleport now
 			//Cast<APlayerWilliam>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->Hiding(FVector(1000.f, 1000.f, 1000.f));
 		}

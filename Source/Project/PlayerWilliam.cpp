@@ -161,12 +161,24 @@ void APlayerWilliam::AttackFinished()
 
 void APlayerWilliam::StartInteract()
 {
-	UE_LOG(LogTemp, Warning, TEXT("fiddle!"));
-	bIsInteracting = true;
-	if (bIsInteracting)
+	if (bHide==true)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("bIsInteracting"));
+		UE_LOG(LogTemp, Warning, TEXT("Emerge test"));
+		bHide = false;
+		SetActorLocation(preHide);
+		SetActorScale3D(GetActorScale3D() * 4);
+		SetActorEnableCollision(true);
 	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("fiddle!"));
+		bIsInteracting = true;
+		if (bIsInteracting)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("bIsInteracting"));
+		}
+	}
+	
 }
 
 void APlayerWilliam::StopInteract()
@@ -191,9 +203,7 @@ void APlayerWilliam::InteractFinished()
 
 void APlayerWilliam::death()
 {
-	//GetWeapon();
-	//Hiding(FVector(140.f, -528.f, 0.f));
-	//bAmIDead = true;
+	bAmIDead = true;
 }
 
 void APlayerWilliam::Win()
@@ -211,17 +221,30 @@ void APlayerWilliam::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 
 void APlayerWilliam::Hiding(FVector p)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Hiding test"));
-	if (bHide)
+	UE_LOG(LogTemp, Error, TEXT("Vector given %s"), *p.ToString());
+	//if (bHide == true)
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("Emerge test"));
+	//	//bHide = false;
+	//	//SetActorLocation(preHide);
+	//}
+	//else
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("Hiding test"));
+	//	//bHide = true;
+	//	preHide = GetActorLocation();
+	//	//SetActorLocation(p);
+	//} 
+	//bHide = !bHide;
+	//SetActorLocation(p);
+	if (bHide == false)
 	{
-		bHide = false;
-		SetActorLocation(preHide);
-	}
-	else
-	{
+		UE_LOG(LogTemp, Warning, TEXT("Hiding test"));
 		bHide = true;
 		preHide = GetActorLocation();
 		SetActorLocation(p);
+		SetActorEnableCollision(false);
+		SetActorScale3D(GetActorScale3D() / 4);
 	}
 }
 
