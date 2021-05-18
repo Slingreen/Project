@@ -20,8 +20,11 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Basic")
 	class UBoxComponent* Collider{ nullptr };
 
+	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Linked_Items");
+	AWall_UPDOWN* Walls{ nullptr };*/
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Linked_Items");
-	AWall_UPDOWN* Walls{ nullptr };
+	TArray <AWall_UPDOWN*> WallsArr{ nullptr };
 
 	UFUNCTION(BlueprintCallable, Category = "OverlapEvents")
 		void Enter();
