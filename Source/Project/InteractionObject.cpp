@@ -11,11 +11,11 @@ AInteractionObject::AInteractionObject()
 	PrimaryActorTick.bCanEverTick = true;
 
 	//Mesh
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	RootComponent = Mesh;
+	Door_Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Door_Mesh"));
+	RootComponent = Door_Mesh;
 
 	//Collider
-	Collider = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
+	Collider = CreateDefaultSubobject<UBoxComponent>(TEXT("DoorCollider"));
 	Collider->SetupAttachment(RootComponent);
 
 	Collider->SetGenerateOverlapEvents(true);
