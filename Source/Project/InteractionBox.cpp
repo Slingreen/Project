@@ -58,4 +58,5 @@ void AInteractionBox::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 			//	This works to teleport now
 			//Cast<APlayerWilliam>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->Hiding(FVector(1000.f, 1000.f, 1000.f));
 		}
+
 } 

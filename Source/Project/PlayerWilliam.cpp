@@ -66,9 +66,6 @@ void APlayerWilliam::BeginPlay()
 	MyInteraction = GetWorld()->SpawnActor<AInteractionBox>(InteractionBox);
 	MyInteraction->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("InteractSocket"));
 
-	MyWeapon = GetWorld()->SpawnActor<AKnifeWeapon>(WeaponType);
-	MyWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("R_handSocket"));
-
 	bIsInteracting = false;
 }
 
@@ -135,8 +132,11 @@ void APlayerWilliam::StopFast()
 
 void APlayerWilliam::StartAttack()
 {
-	UE_LOG(LogTemp, Warning, TEXT("start attack called!"));
-	bIsAttacking = true;
+	if (bWeapon)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("start attack called!"));
+		bIsAttacking = true;
+	}
 }
 
 void APlayerWilliam::StopAttack()
@@ -191,7 +191,8 @@ void APlayerWilliam::InteractFinished()
 
 void APlayerWilliam::death()
 {
-	Hiding(FVector(140.f, -528.f, 0.f));
+	//GetWeapon();
+	//Hiding(FVector(140.f, -528.f, 0.f));
 	//bAmIDead = true;
 }
 
@@ -223,3 +224,11 @@ void APlayerWilliam::Hiding(FVector p)
 		SetActorLocation(p);
 	}
 }
+
+void APlayerWilliam::GetWeapon()
+{
+	MyWeapon = GetWorld()->SpawnActor<AKnifeWeapon>(WeaponType);
+	MyWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("R_handSocket"));
+	bWeapon = true;
+}
+
