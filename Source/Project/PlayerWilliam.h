@@ -71,6 +71,8 @@ public:
 
 	void Hiding(FVector p);
 
+	void GetWeapon();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -92,7 +94,10 @@ protected:
 	
 
 private:
-	
+	FVector preHide{ 0.f, 0.f, 0.f };
+	bool bHide = false;
+	bool bWeapon = false;
+
 	//Functions for movement
 	void MoveForward(float Value);
 	void MoveRight(float Value);
