@@ -12,11 +12,14 @@ class PROJECT_API ADoor : public AInteractionObject
 	GENERATED_BODY()
 	
 public:
-
+	ADoor();
 	void Interacted();
 
 	UPROPERTY(EditAnywhere, Category = "Rotation")
-		int RotSpeed = 2;
+		int RotSpeed{ 2 };
+
+	UPROPERTY(EditAnywhere, Category = "Key")
+		bool Unlocked{ false };
 
 	UPROPERTY(EditAnywhere, Category = "Key")
 		bool Unlocked{ false };
