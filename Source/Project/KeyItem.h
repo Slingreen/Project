@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "InteractionObject.h"
+#include "Door.h"
 #include "KeyItem.generated.h"
 
 UCLASS()
@@ -14,5 +15,5 @@ class PROJECT_API AKeyItem : public AInteractionObject
 public:
 	void Interacted();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Linked_Items");
-	ADoor* Door{ nullptr };
+	TArray <ADoor*> Door{ nullptr };
 };

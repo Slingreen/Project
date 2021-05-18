@@ -21,13 +21,19 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Key")
 		bool Unlocked{ false };
 
+	UFUNCTION(BlueprintCallable, Category = "AudioPlayer")
+		void Rotate();
+
+	UPROPERTY(EditAnywhere, Category = "Audio")
+		bool Rotate_B{ false };
+	UPROPERTY(EditAnywhere, Category = "Audio")
+		bool Open{ false };
+
+
 private:
-	bool Rotate_B{ false };
-	bool Open{ false };
 	int Max_Degrees{ 90 };
 	int Current_Degree{ 0 };
 	int Min_Degree{ 0 };
-	void Rotate();
 
 public:
 	// Called every frame
