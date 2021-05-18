@@ -46,6 +46,11 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "AI")
 		class UPawnSensingComponent* PawnSensing;
 
+	UPROPERTY(VisibleAnywhere, Category = "Light")
+		class USpotLightComponent* Spotlight;
+
+	class UCapsuleComponent* Capsule = GetCapsuleComponent();
+
 	//UPROPERTY(EditAnywhere, Category = "Setup")
 	//	class UBoxComponent* Collider{ nullptr };
 
@@ -80,11 +85,28 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Setup")
 		bool Melee{ false };
 	
+public:
 
 	void Shoot();
+	UFUNCTION(BlueprintCallable)
+		void ShootEnd();
+	UFUNCTION(BlueprintCallable)
+		void ShootSpawn();
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation")
+		bool AmIShooting{ false };
 	void Death();
+	UFUNCTION(BlueprintCallable)
+		void DeathEnd();
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation")
+		bool AmIDead{ false };
 	void GradualRotate();
 	void Attack();
+	UFUNCTION(BlueprintCallable)
+		void AttackEnd();
+	UFUNCTION(BlueprintCallable)
+		void AttackKill();
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation")
+		bool AmIAttacking{ false };
 	UPROPERTY(EditAnywhere, Category = "Setup")
 	bool NeedRotation{ false };
 	float NeedRotationTimer{ 0.f };

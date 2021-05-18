@@ -7,6 +7,7 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "Components/BoxComponent.h"
 #include "PlayerWilliam.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 ACrabmonster::ACrabmonster()
@@ -18,12 +19,11 @@ ACrabmonster::ACrabmonster()
 	Sensing = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("Sensing"));
 	Sensing->SetPeripheralVisionAngle(70.f);
 
-	Collider = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
+	//Collider = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
 	//Root = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
-	Collider->SetGenerateOverlapEvents(true);
+	//Collider->SetGenerateOverlapEvents(true);
 	//SetRootComponent(Root);
 //<<<<<<< Updated upstream
-	//	This was broken when I got it, had to comment it out
 	//Collider->AttachTo(RootComponent);
 //=======
 	//USkeletalMeshComponent* Mesh = GetMesh();
@@ -43,8 +43,12 @@ void ACrabmonster::BeginPlay()
 	if (Sensing)
 	{
 		Sensing->OnSeePawn.AddDynamic(this, &ACrabmonster::OnPlayerCaught);
-		Cast<UBoxComponent>(Collider)->OnComponentBeginOverlap.AddDynamic(this, &ACrabmonster::Overlap);
+		//Cast<UBoxComponent>(Collider)->OnComponentBeginOverlap.AddDynamic(this, &ACrabmonster::Overlap);
 		//MeeleeAttack.AddDynamic(this, &ACrabmonster::MeeleeAttack);
+		GetMesh()->OnComponentBeginOverlap.AddDynamic(this, &ACrabmonster::Overlap);
+		//UCharacterMovementComponent* Moving = GetCharacterMovement();
+		//GetCharacterMovement()->MaxWalkSpeed = 600;
+		
 		
 	}
 	
@@ -83,19 +87,49 @@ void ACrabmonster::OnPlayerCaught(APawn* APawn)
 void ACrabmonster::MeleeAttack()
 {
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("PlayerCollision!"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("PlayerCollision!"));
+	AmIAttacking = true;
 
-	
+}
+
+void ACrabmonster::AttackEnd()
+{
+	AmIAttacking = false;
+}
+
+void ACrabmonster::AttackKill()
+{
+}
+
+void ACrabmonster::AttackBottom()
+{
+	TArray<AActor*> TargetsHit;
+	GetOverlappingActors(TargetsHit,APlayerWilliam::StaticClass());
+	if (TargetsHit.Num() > 0)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("PlayerCollision!"));
+		APlayerController* PlayerController = Cast<APlayerController>(GEngine->GetFirstLocalPlayerController(GetWorld()));
+		APlayerWilliam* Player = Cast<APlayerWilliam>(PlayerController->GetCharacter());
+		Player->death();
+	}
+}
+
+void ACrabmonster::DisableOverlap()
+{
 }
 
 void ACrabmonster::Overlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweeb, const FHitResult& SweepResult)
 {
 
-	if (OtherActor->IsA(APlayerWilliam::StaticClass())) {
-
-
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("PlayerCollision!"));
-		MeleeAttack();
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("DetectedCollision"));
+	if (OtherActor->IsA(APlayerWilliam::StaticClass())) 
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("PlayerCollision!"));
+		APlayerController* PlayerController = Cast<APlayerController>(GEngine->GetFirstLocalPlayerController(GetWorld()));
+		APlayerWilliam* Player = Cast<APlayerWilliam>(PlayerController->GetCharacter());
+		Player->death();
+		
+		
 	}
 }
 
