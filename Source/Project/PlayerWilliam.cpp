@@ -66,9 +66,6 @@ void APlayerWilliam::BeginPlay()
 	MyInteraction = GetWorld()->SpawnActor<AInteractionBox>(InteractionBox);
 	MyInteraction->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("InteractSocket"));
 
-	MyWeapon = GetWorld()->SpawnActor<AKnifeWeapon>(WeaponType);
-	MyWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("R_handSocket"));
-
 	bIsInteracting = false;
 }
 
@@ -135,8 +132,11 @@ void APlayerWilliam::StopFast()
 
 void APlayerWilliam::StartAttack()
 {
-	UE_LOG(LogTemp, Warning, TEXT("start attack called!"));
-	bIsAttacking = true;
+	if (bWeapon)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("start attack called!"));
+		bIsAttacking = true;
+	}
 }
 
 void APlayerWilliam::StopAttack()
@@ -161,12 +161,24 @@ void APlayerWilliam::AttackFinished()
 
 void APlayerWilliam::StartInteract()
 {
-	UE_LOG(LogTemp, Warning, TEXT("fiddle!"));
-	bIsInteracting = true;
-	if (bIsInteracting)
+	if (bHide==true)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("bIsInteracting"));
+		UE_LOG(LogTemp, Warning, TEXT("Emerge test"));
+		bHide = false;
+		SetActorLocation(preHide);
+		SetActorScale3D(GetActorScale3D() * 4);
+		SetActorEnableCollision(true);
 	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("fiddle!"));
+		bIsInteracting = true;
+		if (bIsInteracting)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("bIsInteracting"));
+		}
+	}
+	
 }
 
 void APlayerWilliam::StopInteract()
@@ -209,6 +221,37 @@ void APlayerWilliam::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 
 void APlayerWilliam::Hiding(FVector p)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Hiding test"));
-	SetActorLocation(p);
+	UE_LOG(LogTemp, Error, TEXT("Vector given %s"), *p.ToString());
+	//if (bHide == true)
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("Emerge test"));
+	//	//bHide = false;
+	//	//SetActorLocation(preHide);
+	//}
+	//else
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("Hiding test"));
+	//	//bHide = true;
+	//	preHide = GetActorLocation();
+	//	//SetActorLocation(p);
+	//} 
+	//bHide = !bHide;
+	//SetActorLocation(p);
+	if (bHide == false)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Hiding test"));
+		bHide = true;
+		preHide = GetActorLocation();
+		SetActorLocation(p);
+		SetActorEnableCollision(false);
+		SetActorScale3D(GetActorScale3D() / 4);
+	}
 }
+
+void APlayerWilliam::GetWeapon()
+{
+	MyWeapon = GetWorld()->SpawnActor<AKnifeWeapon>(WeaponType);
+	MyWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("R_handSocket"));
+	bWeapon = true;
+}
+

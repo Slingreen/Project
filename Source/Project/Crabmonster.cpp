@@ -23,10 +23,11 @@ ACrabmonster::ACrabmonster()
 	Collider->SetGenerateOverlapEvents(true);
 	//SetRootComponent(Root);
 //<<<<<<< Updated upstream
-	Collider->AttachTo(RootComponent);
+	//	This was broken when I got it, had to comment it out
+	//Collider->AttachTo(RootComponent);
 //=======
 	//USkeletalMeshComponent* Mesh = GetMesh();
-	GetMesh()->AttachTo(RootComponent);
+	//GetMesh()->AttachTo(RootComponent);
 	//GetCapsuleComponent()->AttachTo(RootComponent);
 	//Collider->USceneComponent::AttachTo(RootComponent);
 	
