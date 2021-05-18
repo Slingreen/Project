@@ -26,8 +26,7 @@ void APainting::Tick(float DeltaTime)
 
 void APainting::Move()
 {
-	if (Current_Loc >= Max_Loc && Open == false) {
-		Open = true;
+	if (Current_Loc <= Max_Loc) {
 		Move_B = false;
 		SetActorEnableCollision(!Move_B);
 		return;
@@ -39,14 +38,16 @@ void APainting::Move()
 }
 
 void APainting::Interacted() {
-	if (!Open) {
-		if (!Unlocked) {
+	UE_LOG(LogTemp, Warning, TEXT("Hello"));
+	//if (Open == false) {
+		if (Unlocked == false) {
 			Comment = "This painting always creeped me out, the eyes seems too follow you.";
-			Unlocked = !Unlocked;
+			Unlocked = true;
+			UE_LOG(LogTemp, Warning, TEXT("Can now open"));
 		}
 		else {
 			Comment = "Aha, a secret passage to my sisters room. That Bitch";
 			Move_B = true;
 		}
-	}
+	//}
 }
