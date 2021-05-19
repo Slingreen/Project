@@ -203,7 +203,7 @@ void APlayerWilliam::InteractFinished()
 
 void APlayerWilliam::death()
 {
-	bAmIDead = true;
+	//bAmIDead = true;
 }
 
 void APlayerWilliam::Win()

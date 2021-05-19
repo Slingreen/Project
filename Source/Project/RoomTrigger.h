@@ -52,4 +52,5 @@ public:
 
 private:
 	bool WallsDown{ false };
+	int WallsLength{ 0 };
 };

@@ -16,4 +16,11 @@ public:
 	void Interacted();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Linked_Items");
 	TArray <ADoor*> Door{ nullptr };
+
+private:
+	int ArrLenght{ 0 };
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 };

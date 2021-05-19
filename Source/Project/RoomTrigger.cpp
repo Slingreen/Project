@@ -24,7 +24,7 @@ void ARoomTrigger::Enter()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Walls Down"));
 	if (!WallsDown) {
-		for (int i = 0; i < WallsArr.Max(); i++) {
+		for (int i = 0; i < WallsLength; i++) {
 			WallsArr[i]->WallDown();
 		}
 	}
@@ -35,7 +35,7 @@ void ARoomTrigger::Exit()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Walls Up"));
 	if (WallsDown) {
-		for (int i = 0; i < WallsArr.Max(); i++) {
+		for (int i = 0; i < WallsLength; i++) {
 			WallsArr[i]->WallUp();
 		}
 	}
@@ -46,6 +46,7 @@ void ARoomTrigger::Exit()
 void ARoomTrigger::BeginPlay()
 {
 	Super::BeginPlay();
+	WallsLength = WallsArr.Num();
 }
 
 // Called every frame
@@ -62,6 +63,7 @@ void ARoomTrigger::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 {
 		if (OtherActor->IsA(APlayerWilliam::StaticClass()))
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Enter"));
 			Enter();
 		}
 }
