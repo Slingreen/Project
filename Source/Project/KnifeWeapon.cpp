@@ -49,8 +49,6 @@ void AKnifeWeapon::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 	UE_LOG(LogTemp, Warning, TEXT("Overlap Detected: %s"), *OtherActor->GetName())
 	if (OtherActor->IsA(ASentry::StaticClass()))
 	{
-
 		Cast<ASentry>(OtherActor)->Death();
-
 	}
 }
