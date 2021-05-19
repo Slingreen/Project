@@ -16,8 +16,13 @@ class PROJECT_API AAICrabController : public AAIController
 {
 	GENERATED_BODY()
 
+public:
+
 	UBlackboardComponent* BlackboardCrab;
 	UBehaviorTreeComponent* BehaviorCrab;
+
+	int32 AllPatrolKeySize;
+	int32 PatrolKeySize;
 
 	UPROPERTY(EditAnywhere, Category = "AI")
 		FName MoveKey;
