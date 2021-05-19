@@ -53,6 +53,7 @@ void AAISentryController::OnPossess(APawn* APawn)
 			
 			//ArraySize = PatrolKeys.Num();
 			//AllPatrolKeys = Sentry->AllPatrolKeys;
+			int z = 0;
 			for (int i = 0; i < AllPatrolKeySize; i++)
 			{
 				
@@ -64,8 +65,9 @@ void AAISentryController::OnPossess(APawn* APawn)
 
 					if (PatrolRef->PointOwner->GetName() == Sentry->GetName())
 					{
-						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("First "));
-						Sentry->PatrolKeys.Insert(AllPatrolKeys[i], -1);
+						//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("First "));
+						Sentry->PatrolKeys.Insert(AllPatrolKeys[i], z);
+						z++;
 					}
 				}
 			}
