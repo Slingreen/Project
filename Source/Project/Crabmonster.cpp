@@ -9,7 +9,8 @@
 #include "PlayerWilliam.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "PatrolPoint.h"
+#include "AICrabPoint.h"
+#include "Math/Vector.h"
 
 
 // Sets default values
@@ -34,7 +35,7 @@ void ACrabmonster::BeginPlay()
 		Sensing->OnSeePawn.AddDynamic(this, &ACrabmonster::OnPlayerCaught);
 		GetMesh()->OnComponentBeginOverlap.AddDynamic(this, &ACrabmonster::Overlap);
 		GetCharacterMovement()->MaxWalkSpeed = 300;
-		//UGameplayStatics::GetAllActorsOfClass(GetWorld(), APatrolPoint::StaticClass(), AllPatrolKeys);
+		//UGameplayStatics::GetAllActorsOfClass(GetWorld(), AAICrabPoint::StaticClass(), AllPatrolKeys);
 	}
 	
 }
@@ -50,7 +51,6 @@ void ACrabmonster::Tick(float DeltaTime)
 
 		if (CurrentTimer >= VisibleTimer)
 		{
-
 			PlayerVisible = false;
 
 			//AICon->PlayerVisible = false;
@@ -99,6 +99,7 @@ void ACrabmonster::MeleeAttack()
 
 void ACrabmonster::AttackEnd()
 {
+	AmIAttacking = false;
 	
 }
 
@@ -117,10 +118,7 @@ void ACrabmonster::AttackBottom()
 	APlayerController* PlayerController = Cast<APlayerController>(GEngine->GetFirstLocalPlayerController(GetWorld()));
 	APlayerWilliam* Player = Cast<APlayerWilliam>(PlayerController->GetCharacter());
 	FVector PlayerLoc = Player->GetActorLocation();
-	FVector CrabLoc = GetActorLocation();
-	float DistanceX = PlayerLoc.X - CrabLoc.X;
-	float DistanceY = PlayerLoc.Y - CrabLoc.Y;
-	float Distance = sqrt(DistanceX * DistanceX + DistanceY * DistanceY);
+	float Distance = GetDistanceTo(Player);
 	if (Distance < 50.f)
 	{
 		Player->death();

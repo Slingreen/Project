@@ -16,5 +16,7 @@ class PROJECT_API AAICrabPoint : public ATargetPoint
 
 public:
 
+	UPROPERTY(EditAnywhere, Category = "Setup")
+		class ACharacter* PointOwner{ nullptr };
 	
 };

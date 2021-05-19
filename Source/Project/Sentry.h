@@ -99,7 +99,7 @@ public:
 	void Death();
 	UFUNCTION(BlueprintCallable)
 		void DeathEnd();
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 		bool AmIDead{ false };
 	void GradualRotate();
 	void Attack();

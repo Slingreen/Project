@@ -173,7 +173,7 @@ void ASentry::Death()
 	//temporary, until I can fix the animations that github destroyed
 	AmIDead = true;
 	AAISentryController* AICon = Cast<AAISentryController>(GetController());
-	AICon->SetPlayerCaught(nullptr);
+	//AICon->SetPlayerCaught(nullptr);
 	UnPossessed();
 
 	//this->Destroy();
@@ -185,7 +185,6 @@ void ASentry::DeathEnd()
 	this->UninitializeComponents();
 	this->Destroy();
 
-	
 }
 
 void ASentry::GradualRotate()
@@ -211,7 +210,14 @@ void ASentry::AttackKill()
 {
 	APlayerController* PlayerController = Cast<APlayerController>(GEngine->GetFirstLocalPlayerController(GetWorld()));
 	APlayerWilliam* Player = Cast<APlayerWilliam>(PlayerController->GetCharacter());
-	Player->death();
+	FVector PlayerLoc = Player->GetActorLocation();
+	float Distance = GetDistanceTo(Player);
+	if (Distance < 50.f)
+	{
+		Player->death();
+	}
+	//Player->death();
+	AmIAttacking = false;
 }
 
 //>>>>>>> Stashed changes

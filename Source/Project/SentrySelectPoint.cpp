@@ -12,7 +12,7 @@ EBTNodeResult::Type USentrySelectPoint::ExecuteTask(UBehaviorTreeComponent& Owne
 	AAISentryController* AICon = Cast<AAISentryController>(OwnerComp.GetAIOwner());
 	ASentry* Sentry = Cast<ASentry>(AICon->GetPawn());
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Sentry Selecting new point"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Sentry Selecting new point"));
 	if (AICon)
 	{
 		UBlackboardComponent* BlackboardComp = AICon->GetBlackboardComponent();

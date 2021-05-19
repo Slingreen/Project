@@ -17,7 +17,7 @@ class PROJECT_API UCrabSelectPointTask : public UBTTaskNode
 
 		int Size;
 		
-		int Index;
+		int Index = 0;
 
 		virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 

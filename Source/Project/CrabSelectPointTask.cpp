@@ -5,7 +5,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AICrabController.h"
 #include "CrabMonster.h"
-#include "PatrolPoint.h"
+#include "AICrabPoint.h"
 #include "Math/UnrealMathUtility.h"
 
 
@@ -20,48 +20,34 @@ EBTNodeResult::Type UCrabSelectPointTask::ExecuteTask(UBehaviorTreeComponent& Ow
 	
 	AAICrabController* AICon = Cast<AAICrabController>(OwnerComp.GetAIOwner());
 	//ACrabmonster* Crab = Cast<ACrabmonster>(AICon->GetPawn());
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Selecting new point"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Selecting new point"));
 	if (AICon)
 	{
 		UBlackboardComponent* BlackboardComp = AICon->GetBlackboardComponent();
 
-		APatrolPoint* CurrentKey = Cast<APatrolPoint>(BlackboardComp->GetValueAsObject("MoveKey"));
+		AAICrabPoint* CurrentKey = Cast<AAICrabPoint>(BlackboardComp->GetValueAsObject("MoveKey"));
 
-		TArray<AActor*> AvailablePatrolKeys = AICon->GetPatrolKeys();
+		TArray<AActor*> AvailablePatrolKeys = AICon->AllPatrolKeys;
 
-		APatrolPoint* NextPatrolKey = nullptr;
+		AActor* NextPatrolKey = nullptr;
 
-		Size = AvailablePatrolKeys.Num() - 1;
-
-		//for (int i = 0; i < 1; i++)
-		//{
-			//PatrolPoint = AvailablePatrolKeys[0];
-			Index = FMath::RandRange(0, Size);
-
-			NextPatrolKey = Cast<APatrolPoint>(AvailablePatrolKeys[Index]);
-
-			
-			
-			/*if (CurrentKey == NextPatrolKey)
-			{
-				i--;
-			}*/
+		Size = AvailablePatrolKeys.Num() ;
 
 
-//<<<<<<< Updated upstream
-		//AActor* Crab = AICon->GetPawn();
-		//Crab->MeleeAttack();
-		
-//=======
-			//AActor* Crab = AICon->GetPawn();
-			//Crab->MeleeAttack();
-//>>>>>>> Stashed changes
+		Index++;
 
-		//}
-		BlackboardComp->SetValueAsObject("MoveKey", NextPatrolKey);
-		return EBTNodeResult::Succeeded;
+		if (Index > Size - 1)
+		{
+			Index = 0;
 
+		}
+		if (Size > 0)
+		{
 
+			NextPatrolKey = AvailablePatrolKeys[Index];
+			BlackboardComp->SetValueAsObject("MoveKey", NextPatrolKey);
+			return EBTNodeResult::Succeeded;
+		}
 	}
 
 	return EBTNodeResult::Failed;

@@ -37,9 +37,6 @@ public:
 	TArray<AActor*> AllPatrolKeys;
 	AActor* PatrolPoint{ nullptr };
 
-
-
-
 	virtual void OnPossess(APawn* APawn) override;
 
 
@@ -48,13 +45,12 @@ public:
 
 	void SetPlayerCaught(APawn* APawn);
 
-	int32 CurrentPatrolKey = 0;
+	int Index{ 0 };
 
 	FORCEINLINE UBlackboardComponent* GetBlackboardComponent() const { return BlackboardCrab; }
 	FORCEINLINE TArray<AActor*> GetPatrolKeys() const { return PatrolKeys; }
 
 private:
-	int ArraySize;
 	
 	
 };

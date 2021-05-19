@@ -6,7 +6,7 @@
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "Crabmonster.h"
-#include "PatrolPoint.h"
+#include "AICrabPoint.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -24,7 +24,10 @@ AAICrabController::AAICrabController()
 	MoveKey = "MoveKey";
 	PastPlayerKey = "PastPlayerKey";
 
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APatrolPoint::StaticClass(), AllPatrolKeys);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AAICrabPoint::StaticClass(), AllPatrolKeys);
+	
+
+	
 	
 }
 
@@ -36,7 +39,9 @@ void AAICrabController::OnPossess(APawn* APawn)
 	
 
 	ACrabmonster* CrabMonster = Cast<ACrabmonster>(APawn);
-	AllPatrolKeySize = AllPatrolKeys.Num();
+
+	//AllPatrolKeys = CrabMonster->AllPatrolKeys;
+	//AllPatrolKeySize = AllPatrolKeys.Num();
 
 	if (CrabMonster)
 	{
@@ -49,25 +54,26 @@ void AAICrabController::OnPossess(APawn* APawn)
 			BehaviorCrab->StartTree(*CrabMonster->BehaviorTree);
 		}
 		//ArraySize = PatrolKeys.Num();
-		//AllPatrolKeys = CrabMonster->AllPatrolKeys;
-		for (int i = 0; i < AllPatrolKeySize; i++)
-		{
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Crab behavior is good"));
-			APatrolPoint* PatrolRef = Cast<APatrolPoint>(AllPatrolKeys[i]);
+		
+		//for (int i = 0; i < AllPatrolKeySize; i++)
+		//{
+		//	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Crab behavior is good"));
+		//	AAICrabPoint* PatrolRef = Cast<AAICrabPoint>(AllPatrolKeys[i]);
 
-			if (PatrolRef->PointOwner != nullptr)
-			{
-				
-				if (PatrolRef->PointOwner->GetName() == CrabMonster->GetName())
-				{
-					//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Crab Owns this point"));
-					PatrolKeys.Insert(AllPatrolKeys[i],i);
-				}
-			}
-		}
-		if (PatrolKeys.Num() > 0)
+		//	if (PatrolRef->PointOwner != nullptr)
+		//	{
+		//		
+		//		if (PatrolRef->PointOwner->GetName() == CrabMonster->GetName())
+		//		{
+		//			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Crab Owns this point"));
+		//			PatrolKeys.Insert(AllPatrolKeys[i],i);
+		//		}
+		//	}
+		//}
+		if (AllPatrolKeys.Num() > 0)
 		{
-			BlackboardCrab->SetValueAsObject(MoveKey, PatrolKeys[0]);
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("MoveKey is set"));
+			BlackboardCrab->SetValueAsObject(MoveKey, AllPatrolKeys[0]);
 		}
 	}
 }
