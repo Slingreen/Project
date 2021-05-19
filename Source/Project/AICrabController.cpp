@@ -23,12 +23,7 @@ AAICrabController::AAICrabController()
 	PlayerKey = "PlayerKey";
 	MoveKey = "MoveKey";
 	PastPlayerKey = "PastPlayerKey";
-
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AAICrabPoint::StaticClass(), AllPatrolKeys);
-	
-
-	
-	
 }
 
 
@@ -72,7 +67,7 @@ void AAICrabController::OnPossess(APawn* APawn)
 		//}
 		if (AllPatrolKeys.Num() > 0)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("MoveKey is set"));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("MoveKey is set"));
 			BlackboardCrab->SetValueAsObject(MoveKey, AllPatrolKeys[0]);
 		}
 	}

@@ -27,12 +27,11 @@ EBTNodeResult::Type USentrySelectPoint::ExecuteTask(UBehaviorTreeComponent& Owne
 		Size = AvailablePatrolKeys.Num() ;
 
 		//Index = FMath::RandRange(0, Size);
-		Index++;
-		Sentry->Index++;
+		
 		if (Index > Size-1)
 		{
 			Index = 0;
-			Sentry->Index = Index;
+			//Sentry->Index = Index;
 		}
 		if (Size > 0)
 		{
@@ -41,6 +40,8 @@ EBTNodeResult::Type USentrySelectPoint::ExecuteTask(UBehaviorTreeComponent& Owne
 			BlackboardComp->SetValueAsObject("MoveKey", NextPatrolKey);
 			//Sentry->PatrolLocation = NextPatrolKey->GetActorLocation();
 			//Sentry->GradualRotate();
+			Index++;
+			//Sentry->Index = Index;
 			return EBTNodeResult::Succeeded;
 		}
 		
