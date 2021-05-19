@@ -212,12 +212,12 @@ void ASentry::AttackKill()
 	APlayerWilliam* Player = Cast<APlayerWilliam>(PlayerController->GetCharacter());
 	FVector PlayerLoc = Player->GetActorLocation();
 	float Distance = GetDistanceTo(Player);
-	if (Distance < 50.f)
+	if (Distance < 100.f)
 	{
 		Player->death();
 	}
 	//Player->death();
-	AmIAttacking = false;
+	//AmIAttacking = false;
 }
 
 //>>>>>>> Stashed changes

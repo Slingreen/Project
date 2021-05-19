@@ -3,6 +3,7 @@
 
 #include "SentryAnim.h"
 #include "Sentry.h"
+#include "AISentryController.h"
 
 
 void USentryAnim::NativeInitializeAnimation()
@@ -22,12 +23,11 @@ void USentryAnim::UpdateAnimProperties()
 
 	if (MyPawn)
 	{
-
 		FVector TempSpeed = MyPawn->GetVelocity();
 		FVector LateralSpeed = FVector(TempSpeed.X, TempSpeed.Y, 0.f);
 		MoveSpeed = LateralSpeed.Size();
 		Dying = Cast<ASentry>(MyPawn)->AmIDead;
-		Attacking = Cast<ASentry>(MyPawn)->AmIAttacking;
+		SentryAttacking = Cast<ASentry>(MyPawn)->AmIAttacking;
 		Shooting = Cast<ASentry>(MyPawn)->AmIShooting;
 
 	}

@@ -110,7 +110,7 @@ void ACrabmonster::AttackKill()
 void ACrabmonster::AttackBottom()
 {
 	TArray<AActor*> TargetsHit;
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("PlayerCollision!"));
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("PlayerCollision!"));
 	GetOverlappingActors(TargetsHit,APlayerWilliam::StaticClass());
 	//if (TargetsHit.Num() > 0)
 	//{
@@ -119,7 +119,7 @@ void ACrabmonster::AttackBottom()
 	APlayerWilliam* Player = Cast<APlayerWilliam>(PlayerController->GetCharacter());
 	FVector PlayerLoc = Player->GetActorLocation();
 	float Distance = GetDistanceTo(Player);
-	if (Distance < 50.f)
+	if (Distance < 100.f)
 	{
 		Player->death();
 	}

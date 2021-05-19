@@ -30,7 +30,7 @@ public:
 		bool Dying{ false };
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
-		bool Attacking{ false };
+		bool SentryAttacking{ false };
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
 		bool Shooting{ false };
