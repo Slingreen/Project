@@ -90,7 +90,7 @@ void ASentry::Tick(float DeltaTime)
 			AICon->PlayerVisible = false;
 			AICon->SetPlayerCaught(nullptr); 
 			CurrentTimer = 0.f;
-			GetCharacterMovement()->MaxWalkSpeed = 300;
+			GetCharacterMovement()->MaxWalkSpeed = 250;
 
 		}
 		CurrentTimer += DeltaTime;
