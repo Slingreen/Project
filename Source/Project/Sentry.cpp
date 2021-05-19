@@ -10,6 +10,10 @@
 #include "Components/BoxComponent.h"
 #include "PlayerWilliam.h"
 #include "Components/SpotLightComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "PatrolPoint.h"
+#include "Kismet/GameplayStatics.h"
+
 
 //#include "Perception/PawnSensingComponent.h"
 
@@ -35,26 +39,7 @@ ASentry::ASentry()
 	//PawnSensing->SetPeripheralVisionAngle(80.f);
 	PawnSensing->SightRadius = 1000.f;
 
-	//Collider = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
-	//Collider->AttachTo(RootComponent);
-	//Collider->SetGenerateOverlapEvents(false);
 
-	//Capsule = CreateDefaultSubobject<USceneComponent>(TEXT("Capsule"));
-	//Capsule->SetupAttachment(RootComponent);
-	//Capsule->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
-	//EyeMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("EyeMesh"));
-	//EyeMesh->SetupAttachment(RootComponent);
-	
-	//EyeMesh->SetupAttachment(RootComponent);
-	
-	//Capsule = GetCapsuleComponent();
-	//RootComponent = Capsule;
-	//GetCapsuleComponent()->USceneComponent::AttachTo(RootComponent);
-	//Sphere->SetupAttachment(RootComponent);
-	//Capsule->SetupAttachment(RootComponent);
-	
-	
-//>>>>>>> Stashed changes
 }
 
 
@@ -80,6 +65,9 @@ void ASentry::BeginPlay()
 	{
 		PawnSensing->OnSeePawn.AddDynamic(this, &ASentry::OnPlayerCaught);
 	}
+	//UGameplayStatics::GetAllActorsOfClass(GetWorld(), APatrolPoint::StaticClass(), AllPatrolKeys);
+
+
 
 	
 }
@@ -102,46 +90,41 @@ void ASentry::Tick(float DeltaTime)
 			AICon->PlayerVisible = false;
 			AICon->SetPlayerCaught(nullptr); 
 			CurrentTimer = 0.f;
+			GetCharacterMovement()->MaxWalkSpeed = 300;
 
 		}
 		CurrentTimer += DeltaTime;
 
 	}
-	else if (NeedRotation)
-	{
+	//else if (NeedRotation)
+	//{
 
-		//FVector Location = GetActorLocation();
-		//FVector PointLocation = AICon->PatrolKeys[AICon->Index]->GetActorLocation();
-		if (!AmIDead)
-		{
-			FRotator StopRot = UKismetMathLibrary::FindLookAtRotation(this->GetActorLocation(), AICon->PatrolKeys[AICon->Index]->GetActorLocation());
-			//FRotator StopRot = UKismetMathLibrary::FindLookAtRotation(Location, PointLocation);
-			FRotator StartRot = GetActorRotation();
-			//NewRot.Yaw += SentryIdleSpeed;
-			//SetActorRotation(NewRot);
-			if (NeedRotationTimer > 2)
-			{
-				NeedRotation = false;
-			}
-			else if (NeedRotationTimer < 2)
-			{
-				FRotator NewRot = UKismetMathLibrary::RInterpTo(StartRot, StopRot, DeltaTime, 2);
-				NewRot.Roll = 0.f;
-				NewRot.Pitch = 0.f;
-				SetActorRotation(NewRot);
-				NeedRotationTimer += DeltaTime;
+	//	//FVector Location = GetActorLocation();
+	//	//FVector PointLocation = AICon->PatrolKeys[AICon->Index]->GetActorLocation();
+	//	if (PatrolKeys.Num()>0)
+	//	{
+	//		
+	//		FRotator StopRot = UKismetMathLibrary::FindLookAtRotation(this->GetActorLocation(), PatrolKeys[Index]->GetActorLocation());
+	//		//FRotator StopRot = UKismetMathLibrary::FindLookAtRotation(Location, PointLocation);
+	//		FRotator StartRot = GetActorRotation();
+	//		//NewRot.Yaw += SentryIdleSpeed;
+	//		//SetActorRotation(NewRot);
+	//		if (NeedRotationTimer > 2)
+	//		{
+	//			NeedRotation = false;
+	//		}
+	//		else if (NeedRotationTimer < 2)
+	//		{
+	//			FRotator NewRot = UKismetMathLibrary::RInterpTo(StartRot, StopRot, DeltaTime, 2);
+	//			NewRot.Roll = 0.f;
+	//			NewRot.Pitch = 0.f;
+	//			SetActorRotation(NewRot);
+	//			NeedRotationTimer += DeltaTime;
 
-			}
-		}
-		
-	}
-
-
-
-	//RotateSentry();
-
-
-
+	//		}
+	//	}
+	//	
+	//}
 
 }
 
@@ -189,17 +172,19 @@ void ASentry::Death()
 {
 	//temporary, until I can fix the animations that github destroyed
 	AmIDead = true;
+	AAISentryController* AICon = Cast<AAISentryController>(GetController());
+	AICon->SetPlayerCaught(nullptr);
 	UnPossessed();
+
 	//this->Destroy();
 }
 
 void ASentry::DeathEnd()
 {
 	//AmIDead = false;
-	AAISentryController* AIController = Cast<AAISentryController>(GetController());
-	//AIController->Destroy();
 	this->UninitializeComponents();
 	this->Destroy();
+
 	
 }
 
@@ -236,6 +221,7 @@ void ASentry::OnPlayerCaught(APawn* APawn)
 
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("I see you"));
 	AAISentryController* AIController = Cast<AAISentryController>(GetController());
+	GetCharacterMovement()->MaxWalkSpeed = 600;
 	if (AIController)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("I See You!"));
@@ -243,6 +229,7 @@ void ASentry::OnPlayerCaught(APawn* APawn)
 		AIController->PlayerVisible = true;
 		CurrentTimer = 0.f;
 		PlayerVisible = true;
+		
 	}
 
 }

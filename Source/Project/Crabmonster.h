@@ -52,6 +52,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void DisableOverlap();
 
+	TArray<AActor*> AllPatrolKeys;
+
+	UPROPERTY(VisibleAnywhere, Category = "AI")
+		bool PlayerVisible = false;
+	UPROPERTY(EditAnywhere, Category = "AI")
+		float VisibleTimer = 5.f;
+	UPROPERTY(VisibleAnywhere, Category = "AI")
+		float CurrentTimer = 0.f;
+
 
 
 private:

@@ -72,6 +72,8 @@ public:
 //=======
 	//void RotateSentry();
 	UPROPERTY(VisibleAnywhere, Category = "AI")
+	TArray<AActor*> PatrolKeys;
+	UPROPERTY(VisibleAnywhere, Category = "AI")
 	float CurrentTimer = 0.f;
 	UPROPERTY(VisibleAnywhere, Category = "AI")
 	float ShootCooldownTimer = 0.f;
@@ -110,6 +112,10 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Setup")
 	bool NeedRotation{ false };
 	float NeedRotationTimer{ 0.f };
+	UPROPERTY(VisibleAnywhere, Category = "AI")
+		int Index{ 0 };
+	UPROPERTY(VisibleAnywhere, Category = "AI")
+		FVector PatrolLocation;
 
 
 	FRotator PlayerRotation = FRotator(0.f, 0.f, 0.f);

@@ -8,6 +8,9 @@
 #include "Components/BoxComponent.h"
 #include "PlayerWilliam.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "PatrolPoint.h"
+
 
 // Sets default values
 ACrabmonster::ACrabmonster()
@@ -19,20 +22,6 @@ ACrabmonster::ACrabmonster()
 	Sensing = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("Sensing"));
 	Sensing->SetPeripheralVisionAngle(70.f);
 
-	//Collider = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
-	//Root = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
-	//Collider->SetGenerateOverlapEvents(true);
-	//SetRootComponent(Root);
-//<<<<<<< Updated upstream
-	//Collider->AttachTo(RootComponent);
-//=======
-	//USkeletalMeshComponent* Mesh = GetMesh();
-	//GetMesh()->AttachTo(RootComponent);
-	//GetCapsuleComponent()->AttachTo(RootComponent);
-	//Collider->USceneComponent::AttachTo(RootComponent);
-	
-//>>>>>>> Stashed changes
-
 }
 
 // Called when the game starts or when spawned
@@ -43,13 +32,9 @@ void ACrabmonster::BeginPlay()
 	if (Sensing)
 	{
 		Sensing->OnSeePawn.AddDynamic(this, &ACrabmonster::OnPlayerCaught);
-		//Cast<UBoxComponent>(Collider)->OnComponentBeginOverlap.AddDynamic(this, &ACrabmonster::Overlap);
-		//MeeleeAttack.AddDynamic(this, &ACrabmonster::MeeleeAttack);
 		GetMesh()->OnComponentBeginOverlap.AddDynamic(this, &ACrabmonster::Overlap);
-		//UCharacterMovementComponent* Moving = GetCharacterMovement();
-		//GetCharacterMovement()->MaxWalkSpeed = 600;
-		
-		
+		GetCharacterMovement()->MaxWalkSpeed = 300;
+		//UGameplayStatics::GetAllActorsOfClass(GetWorld(), APatrolPoint::StaticClass(), AllPatrolKeys);
 	}
 	
 }
@@ -58,8 +43,26 @@ void ACrabmonster::BeginPlay()
 void ACrabmonster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	AAICrabController* AICon = Cast<AAICrabController>(GetController());
 
+	if (PlayerVisible)
+	{
 
+		if (CurrentTimer >= VisibleTimer)
+		{
+
+			PlayerVisible = false;
+
+			//AICon->PlayerVisible = false;
+			AICon->SetPlayerCaught(nullptr);
+			//AICon->BlackboardCrab->SetValueAsObject(AICon->PlayerKey, AICon->GetPawn());
+			CurrentTimer = 0.f;
+			GetCharacterMovement()->MaxWalkSpeed = 300;
+
+		}
+		CurrentTimer += DeltaTime;
+
+	}
 
 }
 
@@ -76,10 +79,12 @@ void ACrabmonster::OnPlayerCaught(APawn* APawn)
 	if (AIController)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("I See You!"));
+		GetCharacterMovement()->MaxWalkSpeed = 600;
 		AIController->SetPlayerCaught(APawn);
 		//AIController->PlayerVisible = true;
 		//CurrentTimer = 0.f;
-		//PlayerVisible = true;
+		PlayerVisible = true;
+		CurrentTimer = 0.f;
 	}
 }
 
@@ -94,7 +99,7 @@ void ACrabmonster::MeleeAttack()
 
 void ACrabmonster::AttackEnd()
 {
-	AmIAttacking = false;
+	
 }
 
 void ACrabmonster::AttackKill()
@@ -104,14 +109,25 @@ void ACrabmonster::AttackKill()
 void ACrabmonster::AttackBottom()
 {
 	TArray<AActor*> TargetsHit;
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("PlayerCollision!"));
 	GetOverlappingActors(TargetsHit,APlayerWilliam::StaticClass());
-	if (TargetsHit.Num() > 0)
+	//if (TargetsHit.Num() > 0)
+	//{
+		
+	APlayerController* PlayerController = Cast<APlayerController>(GEngine->GetFirstLocalPlayerController(GetWorld()));
+	APlayerWilliam* Player = Cast<APlayerWilliam>(PlayerController->GetCharacter());
+	FVector PlayerLoc = Player->GetActorLocation();
+	FVector CrabLoc = GetActorLocation();
+	float DistanceX = PlayerLoc.X - CrabLoc.X;
+	float DistanceY = PlayerLoc.Y - CrabLoc.Y;
+	float Distance = sqrt(DistanceX * DistanceX + DistanceY * DistanceY);
+	if (Distance < 50.f)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("PlayerCollision!"));
-		APlayerController* PlayerController = Cast<APlayerController>(GEngine->GetFirstLocalPlayerController(GetWorld()));
-		APlayerWilliam* Player = Cast<APlayerWilliam>(PlayerController->GetCharacter());
 		Player->death();
 	}
+	//Player->death();
+	AmIAttacking = false;
+	//}
 }
 
 void ACrabmonster::DisableOverlap()

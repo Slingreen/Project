@@ -10,46 +10,40 @@
 EBTNodeResult::Type USentrySelectPoint::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	AAISentryController* AICon = Cast<AAISentryController>(OwnerComp.GetAIOwner());
+	ASentry* Sentry = Cast<ASentry>(AICon->GetPawn());
 
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Selecting new point"));
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Sentry Selecting new point"));
 	if (AICon)
 	{
 		UBlackboardComponent* BlackboardComp = AICon->GetBlackboardComponent();
 
 		APatrolPoint* CurrentKey = Cast<APatrolPoint>(BlackboardComp->GetValueAsObject("MoveKey"));
 
-		TArray<AActor*> AvailablePatrolKeys = AICon->GetPatrolKeys();
+		TArray<AActor*> AvailablePatrolKeys = Sentry->PatrolKeys;
 
-		APatrolPoint* NextPatrolKey = nullptr;
+		//APatrolPoint* NextPatrolKey = nullptr;
+		AActor* NextPatrolKey = nullptr;
 
-		Size = AvailablePatrolKeys.Num() - 1;
+		Size = AvailablePatrolKeys.Num() ;
 
 		//Index = FMath::RandRange(0, Size);
 		Index++;
-		AICon->Index++;
-		if (Index > Size)
+		Sentry->Index++;
+		if (Index > Size-1)
 		{
 			Index = 0;
-			AICon->Index = Index;
+			Sentry->Index = Index;
 		}
-
-
-		NextPatrolKey = Cast<APatrolPoint>(AvailablePatrolKeys[Index]);
-
-
-
-
-		BlackboardComp->SetValueAsObject("MoveKey", NextPatrolKey);
-
-		ASentry* Sentry = Cast<ASentry>(AICon->GetPawn());
-		Sentry->GradualRotate();
-
+		if (Size > 0)
+		{
+			//NextPatrolKey = Cast<APatrolPoint>(AvailablePatrolKeys[Index]);
+			NextPatrolKey = AvailablePatrolKeys[Index];
+			BlackboardComp->SetValueAsObject("MoveKey", NextPatrolKey);
+			//Sentry->PatrolLocation = NextPatrolKey->GetActorLocation();
+			//Sentry->GradualRotate();
+			return EBTNodeResult::Succeeded;
+		}
 		
-
-		return EBTNodeResult::Succeeded;
-
-
 	}
-
 	return EBTNodeResult::Failed;
 }

@@ -19,6 +19,8 @@ AAISentryController::AAISentryController()
 
 	PlayerKey = "Target";
 	MoveKey = "MoveKey";
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APatrolPoint::StaticClass(), AllPatrolKeys);
+	AllPatrolKeySize = AllPatrolKeys.Num();
 }																	
 
 
@@ -48,11 +50,12 @@ void AAISentryController::OnPossess(APawn* APawn)
 		}
 		if (Sentry->Melee)
 		{
-			UGameplayStatics::GetAllActorsOfClass(GetWorld(), APatrolPoint::StaticClass(), AllPatrolKeys);
+			
 			//ArraySize = PatrolKeys.Num();
-			for (int i = 0; i < AllPatrolKeys.Num(); i++)
+			//AllPatrolKeys = Sentry->AllPatrolKeys;
+			for (int i = 0; i < AllPatrolKeySize; i++)
 			{
-
+				
 				APatrolPoint* PatrolRef = Cast<APatrolPoint>(AllPatrolKeys[i]);
 
 				if (PatrolRef->PointOwner != nullptr)
@@ -61,23 +64,19 @@ void AAISentryController::OnPossess(APawn* APawn)
 
 					if (PatrolRef->PointOwner->GetName() == Sentry->GetName())
 					{
-
-						//The code does what I want it to, but also not
-						//This happens whenever PointOwnerName = CrabMonsterName,
-						//but it still only goes to the points I choose
-						//Only seems to choose one when I try to remove from a tarray istead of adding them to a different one.
-
-						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("I own this"));
-						PatrolKeys.Insert(AllPatrolKeys[i], i);
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("First "));
+						Sentry->PatrolKeys.Insert(AllPatrolKeys[i], -1);
 					}
-					
 				}
 			}
-			BlackboardSentry->SetValueAsObject(MoveKey, PatrolKeys[0]);
+			if (Sentry->PatrolKeys.Num() > 0)
+			{
+				
+				//BlackboardSentry->SetValueAsObject(MoveKey, Sentry->PatrolKeys[0]);
+				BlackboardSentry->SetValueAsObject(MoveKey, Sentry->PatrolKeys[0]);
+			}
 		}
 	}
-
-
 }
 
 void AAISentryController::SetPlayerCaught(APawn* APawn)

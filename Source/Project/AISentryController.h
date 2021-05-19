@@ -19,9 +19,13 @@ class PROJECT_API AAISentryController : public AAIController
 		//Used https://www.youtube.com/watch?v=3Z1A825gTA8 as a guide/base for the sentry AI
 
 
+public:
+
 		UBehaviorTreeComponent* BehaviorSentry;
 
 		UBlackboardComponent* BlackboardSentry;
+
+
 		
 
 		
@@ -35,6 +39,7 @@ public:
 	AAISentryController();
 
 	void SetPlayerCaught(APawn* APawn);
+
 
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 		FName PlayerKey;
@@ -54,13 +59,15 @@ public:
 
 	//class ASentry* AISentry;
 
+	int32 AllPatrolKeySize;
 
 	TArray<AActor*> PatrolKeys;
-	TArray<AActor*> AllPatrolKeys;
+	UPROPERTY(VisibleAnywhere, Category = "Setup")
+		TArray<AActor*> AllPatrolKeys;
 public:
 
 	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return BlackboardSentry; }
-	FORCEINLINE TArray<AActor*> GetPatrolKeys() const { return PatrolKeys; }
+	//FORCEINLINE TArray<AActor*> GetPatrolKeys() const { return PatrolKeys; }
 
 	//class ASentry* BSentry;
 
