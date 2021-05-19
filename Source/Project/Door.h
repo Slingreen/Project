@@ -24,9 +24,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "AudioPlayer")
 		void Rotate();
 
-	UPROPERTY(EditAnywhere, Category = "Audio")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Audio")
 		bool Rotate_B{ false };
-	UPROPERTY(EditAnywhere, Category = "Audio")
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Audio")
 		bool Open{ false };
 
 

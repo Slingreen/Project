@@ -16,6 +16,8 @@ ARoomTrigger::ARoomTrigger()
 	RootComponent = Collider;
 
 	Collider->SetGenerateOverlapEvents(true);
+
+	Collider->OnComponentBeginOverlap.AddDynamic(this, &ARoomTrigger::OnOverlap);
 }
 
 void ARoomTrigger::Enter()
@@ -53,3 +55,13 @@ void ARoomTrigger::Tick(float DeltaTime)
 
 }
 
+
+void ARoomTrigger::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex,
+	bool bFromSweep, const FHitResult& SweepResult)
+{
+		if (OtherActor->IsA(APlayerWilliam::StaticClass()))
+		{
+			Enter();
+		}
+}

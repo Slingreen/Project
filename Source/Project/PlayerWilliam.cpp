@@ -66,10 +66,6 @@ void APlayerWilliam::BeginPlay()
 	MyInteraction = GetWorld()->SpawnActor<AInteractionBox>(InteractionBox);
 	MyInteraction->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("InteractSocket"));
 
-	MyWeapon = GetWorld()->SpawnActor<AKnifeWeapon>(WeaponType);
-	MyWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("R_handSocket"));
-	bWeapon = true;
-
 	bIsInteracting = false;
 }
 
