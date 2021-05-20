@@ -15,7 +15,7 @@ EBTNodeResult::Type UCrabMeleeTask::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	if (AICon)
 	{
 	
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("AttackTriggered"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("AttackTriggered"));
 		Crab->MeleeAttack();
 
 	}

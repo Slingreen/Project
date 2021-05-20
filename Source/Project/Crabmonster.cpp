@@ -110,7 +110,7 @@ void ACrabmonster::AttackKill()
 void ACrabmonster::AttackBottom()
 {
 	TArray<AActor*> TargetsHit;
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("PlayerCollision!"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("PlayerCollision!"));
 	GetOverlappingActors(TargetsHit,APlayerWilliam::StaticClass());
 	//if (TargetsHit.Num() > 0)
 	//{
