@@ -173,7 +173,11 @@ void ASentry::Death()
 	//temporary, until I can fix the animations that github destroyed
 	AmIDead = true;
 	AAISentryController* AICon = Cast<AAISentryController>(GetController());
-	//AICon->SetPlayerCaught(nullptr);
+	if (PlayerVisible)
+	{
+		AICon->SetPlayerCaught(nullptr);
+	}
+	//
 	UnPossessed();
 
 	//this->Destroy();
